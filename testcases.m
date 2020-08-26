@@ -16,8 +16,19 @@ activelbnds = abs(a-b)<10^(-4);
 I = eye(6);
 A = I(:,activelbnds);
 b = [1,0,0,0.5,0,0]';
+params.OutputFlag = 0;
 model.A = sparse(A);
 model.rhs = b;
 model.sense = '=';
 model.vtype = 'C';
-result = gurobi(model);
+model.lb = zeros(size(A,2),1);
+result = gurobi(model, params);
+if strcmp(result.status,'OPTIMAL')
+    disp('Optimally solved');
+end
+model.rhs = -b;
+result = gurobi(model, params);
+if strcmp(result.status,'OPTIMAL')
+    disp('Optimally solved');
+end
+

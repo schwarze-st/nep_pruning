@@ -29,7 +29,5 @@ for nu=1:N
        end
     end
 end
-
-
 end
 
