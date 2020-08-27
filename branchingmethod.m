@@ -25,21 +25,31 @@ end
 while ~isempty(L)
    Y = L{1};
    L(1)=[];
-   xbar = gaussseidel(Y,Goalfs,n_nus);
-   B = prunebranch(Y, Goalfs, n_nus, xbar)
-   if round(xbar)==xbar
-      if isdiscreteNE(xbar,Omega,Goalfs,N,n_nus)
-          intNE = [intNE;xbar];  %#ok<AGROW>
-      end
-      % Excluding xbar from feasible set      
-      B_list = removexbarbranch(B{1},xbar,n_nus)
-      B = [B_list,B(2:end)];
-   else
-       % Branching step towards integer solution
-       [B_1,B_2] = integralitybranch(B{1},xbar,n_nus);
-       B = [B_1,B_2,B(2:end)];
+   size(L,2)
+   [xbar,yempty] = gaussseidel(Y,Goalfs,n_nus);
+   xbar
+   if ~yempty
+       B = prunebranch(Y, Goalfs, n_nus, xbar);
+       if size(B,2)>1
+           disp('Branched B into more sets');
+       end
+       if max(abs(round(xbar)-xbar))<10^(-5)
+          if isdiscreteNE(xbar,Omega,Goalfs,N,n_nus)
+              disp('Found discrete NE');
+              intNE = [intNE;xbar]  %#ok<AGROW>
+          end
+          % Excluding xbar from feasible set
+          disp('remove integer point');
+          B_list = removexbarbranch(B{1},xbar,n_nus);
+          B = [B_list,B(2:end)];
+       else
+           % Branching step towards integer solution
+           disp('Branch to integers');
+           [B_1,B_2] = integralitybranch(B{1},xbar,n_nus);
+           B = [{B_1},{B_2},B(2:end)];
+       end
+       L = [L,B];
    end
-   L = [L,B];
 end
 
 end
