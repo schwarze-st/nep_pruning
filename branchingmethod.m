@@ -32,11 +32,11 @@ while ~isempty(L)
           intNE = [intNE;xbar];  %#ok<AGROW>
       end
       % Excluding xbar from feasible set      
-      B_list = removexbarbranch(B(1),xbar,n_nus)
+      B_list = removexbarbranch(B{1},xbar,n_nus)
       B = [B_list,B(2:end)];
    else
        % Branching step towards integer solution
-       [B_1,B_2] = integralitybranch(B(1),xbar,n_nus);
+       [B_1,B_2] = integralitybranch(B{1},xbar,n_nus);
        B = [B_1,B_2,B(2:end)];
    end
    L = [L,B];
