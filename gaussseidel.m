@@ -1,4 +1,4 @@
-function xbar = gaussseidel(Y,Goalfs, n_nus)
+function xbar = gaussseidel(Y,Goalfs,n_nus)
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
 

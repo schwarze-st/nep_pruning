@@ -19,19 +19,19 @@ function [flagi,flagii] = checkRequirements(goalfnu, Y, n_nus, xbar, nu, i)
 Qi = goalfnu{2,1}(i,:);
 Ci = goalfnu{1,1}(i,:);
 bi = goalfnu{3,1}(i,1);
-Fnuibar = Qi*getPlayersVector(xbar)+Ci*getOpponentsVector(xbar)+bi;
+Fnuibar = Qi*getPlayersVector(xbar,nu,n_nus)+Ci*getOpponentsVector(xbar,nu,n_nus)+bi;
 
 % Check if case (i)/(ii) is fulfilled
 flagi = false;
 flagii= false;
-logi = zeros(N,1);
-logii = zeros(N,1);
-for mu=1:N
+logi = zeros(sum(n_nus),1);
+logii = zeros(sum(n_nus),1);
+for mu=1:sum(n_nus)
     xmu = getPlayersVector(xbar, mu, n_nus);
-    activeconstr =  abs(Y{1,mu}*xmu-Y{2,mu})<10^(-4);
+    activeconstr = abs(Y{1,mu}*xmu-Y{2,mu})<10^(-4);
     activelbnds = abs(xbar-Y{3,mu}(:,1))<10^(-4);
     activeubnds = abs(xbar-Y{3,mu}(:,2))<10^(-4);
-    I = eye(n_nu(mu,1));
+    I = eye(n_nus(mu,1));
     gradlbs = I(:,activelbnds);
     gradubs = -I(:,activeubnds);       
     if mu==nu
@@ -44,7 +44,7 @@ for mu=1:N
     model.A = sparse([gradcons,gradlbs,gradubs]);
     model.sense = '=';
     model.vtype = 'C';
-    model.lb = zeros(size(A,2),1);
+    model.lb = zeros(size([gradcons,gradlbs,gradubs],2),1);
     params.OutputFlag = 0;
     if Fnuibar>=0
         model.rhs = -gradFnuibar;
@@ -62,12 +62,10 @@ for mu=1:N
     end   
     clear model;
 end
-if and(logi==ones(N,1),Fnuibar>=0)
+if and(logi==ones(sum(n_nus),1),Fnuibar>=0)
     flagi = true;
 end
-if and(logii==ones(N,1),Fnuibar<=0)
+if and(logii==ones(sum(n_nus),1),Fnuibar<=0)
     flagii = true;
 end
 end
-
-

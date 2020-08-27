@@ -5,7 +5,7 @@ N = size(Y,2);
 B = {Y};
 for nu=1:N
     for i=1:n_nus(nu,1)
-       [flagi,flagii] = checkRequirements();
+       [flagi,flagii] = checkRequirements(Goalfs(:,nu),Y,n_nus,xbar,nu,i);
        if flagi
            C = {};
            for p=1:length(B)

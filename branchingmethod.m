@@ -13,7 +13,7 @@ function [intNE] = branchingmethod(Omega,Goalfs)
 %                    1/2* x_nu'*C*x_nu + (C*x_-nu + b)'x_nu
 %    Output: intNE: (p x n)-matrix containing p Nash equilibrium points, one in
 
-L = Omega;
+L = {Omega};
 n = size(Goalfs(1,1),1)+size(Goalfs(1,1),2);
 N = size(Omega,2);
 n_nus = zeros(N,1);
@@ -23,22 +23,23 @@ for i=1:N
 end
 
 while ~isempty(L)
-   Y = L(1);
-   L = L(2:end);
-   xbar = gaussseidel(Y,Goalfs);
-   B = prunebranch(xbar, Y);
+   Y = L{1};
+   L(1)=[];
+   xbar = gaussseidel(Y,Goalfs,n_nus);
+   B = prunebranch(Y, Goalfs, n_nus, xbar)
    if round(xbar)==xbar
-      if isdiscreteNE(xbar,Omega,Goalfs)
+      if isdiscreteNE(xbar,Omega,Goalfs,N,n_nus)
           intNE = [intNE;xbar];  %#ok<AGROW>
       end
       % Excluding xbar from feasible set      
-      B_list = removexbarbranch(B(1),xbar,n_nus);
+      B_list = removexbarbranch(B(1),xbar,n_nus)
       B = [B_list,B(2:end)];
    else
        % Branching step towards integer solution
        [B_1,B_2] = integralitybranch(B(1),xbar,n_nus);
        B = [B_1,B_2,B(2:end)];
    end
+   L = [L,B];
 end
 
 end
