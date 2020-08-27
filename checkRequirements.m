@@ -1,4 +1,4 @@
-function [flagi,flagii] = checkRequirements(goalfnu, Y, xbar, nu, i)
+function [flagi,flagii] = checkRequirements(goalfnu, Y, n_nus, xbar, nu, i)
 %Checks, if the requirements of Pruning Theorem for (i)/(ii) are fulfilled
 %   Input:
 %       goalfnu: (3 x 1)-cell vector containing 3 cells with:
@@ -21,7 +21,7 @@ Ci = goalfnu{1,1}(i,:);
 bi = goalfnu{3,1}(i,1);
 Fnuibar = Qi*getPlayersVector(xbar)+Ci*getOpponentsVector(xbar)+bi;
 
-% Check if case (i) is fulfilled
+% Check if case (i)/(ii) is fulfilled
 flagi = false;
 flagii= false;
 logi = zeros(N,1);

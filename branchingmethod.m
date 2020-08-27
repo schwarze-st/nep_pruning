@@ -17,47 +17,26 @@ L = Omega;
 n = size(Goalfs(1,1),1)+size(Goalfs(1,1),2);
 N = size(Omega,2);
 n_nus = zeros(N,1);
+intNE = zeros(n,0);
 for i=1:N
     n_nus(i,1) = size(Omega(1,1),2);
 end
 
 while ~isempty(L)
    Y = L(1);
-   if length(L)>1
-       L = L(2:end);
-   else
-       L = {};
-   end
-   xbar = getcontNE(Y,Goalfs);
+   L = L(2:end);
+   xbar = gaussseidel(Y,Goalfs);
    B = prunebranch(xbar, Y);
    if round(xbar)==xbar
       if isdiscreteNE(xbar,Omega,Goalfs)
-          intNE = [intNE;xbar];
+          intNE = [intNE;xbar];  %#ok<AGROW>
       end
       % Excluding xbar from feasible set      
-      B_1 = B(1);
-      B = B(2:end);
-      for nu=1:N
-         for i=1:n_nus(nu,1)
-             B_new1 = B_1;
-             B_new2 = B_1;
-             ind = getFullIndex(nu,i,n_nus);
-             B_new1{3,nu}(i,1) = xbar(ind)+1;
-             B_new2{3,nu}(i,2) = xbar(ind)-1;
-             B_1{3,nu}(i,1) = xbar(ind);
-             B_1{3,nu}(i,2) = xbar(ind);
-             B = [B, B_new1, B_new2];
-         end
-      end
+      B_list = removexbarbranch(B(1),xbar,n_nus);
+      B = [B_list,B(2:end)];
    else
        % Branching step towards integer solution
-       logic = find(xbar~=round(xbar));
-       ind = logic(1);
-       [p_ind,p_i] = getPlayersindex(ind,n_nus);
-       B_1 = B(1);
-       B_2 = B(1);
-       B_1{3,p_ind}(p_i,2) = floor(xbar(ind));
-       B_2{3,p_ind}(p_i,1) = ceil(xbar(ind));
+       [B_1,B_2] = integralitybranch(B(1),xbar,n_nus);
        B = [B_1,B_2,B(2:end)];
    end
 end
