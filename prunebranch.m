@@ -23,10 +23,13 @@ for nu=1:N
     for i=1:n_nus(nu,1)
        [flagi,flagii] = checkRequirements(Goalfs(:,nu),Y,n_nus,xbar,nu,i);
        if flagi
-           C = {};
            for p=1:size(B,2)
                if (B{p}{3,nu}(i,2)-B{p}{3,nu}(i,1))<10^(-5)
-                   %do nothing
+                   if p==1
+                       C = B(p);
+                   else
+                       C = [C,B(p)];
+                   end
                else
                    A = B{p}{1,nu};
                    b = B{p}{2,nu};
@@ -34,7 +37,11 @@ for nu=1:N
                    bnds2 = B{p}{3,nu};
                    bnds2(i,1) = bnds2(i,1)+1;
                    bnds1(i,2) = bnds1(i,1);
-                   C = {C,{A;b;bnds1}}
+                   if p==1
+                       C = {A;b;bnds1};
+                   else
+                       C = [C,{A;b;bnds1}];
+                   end
                    J = find(A(:,i)<0);
                    for j=1:size(J,1)
                        A = [A;-A(J(j),:)];
@@ -43,25 +50,32 @@ for nu=1:N
                            A = [A;A(J(k),:)];
                            b = [b;ceil(b(J(j),1)-abs(A(J(j),i)))+1];
                        end
-                       C = {C,{A;b;bnds2}};
+                       C = [C,{A;b;bnds2}];
                    end
                end
            end
            B=C;
        end
        if flagii
-           C = {};
-           for p=1:length(B)
+           for p=1:size(B,2)
                if (B{p}{3,nu}(i,2)-B{p}{3,nu}(i,1))<10^(-5)
-                   %do nothing
+                   if p==1
+                       C = B(p);
+                   else
+                       C = [C,B(p)];
+                   end
                else
+                   A = B{p}{1,nu};
+                   b = B{p}{2,nu};
                    bnds1 = B{p}{3,nu};
                    bnds2 = B{p}{3,nu};
                    bnds2(i,2) = bnds2(i,2)-1;
                    bnds1(i,1) = bnds1(i,2);
-                   C = {C,{A;b;bnds1}}
-                   A = B{p}{1,nu};
-                   b = B{p}{2,nu};
+                   if p==1
+                        C = {A;b;bnds1};
+                   else
+                        C = [C,{A;b;bnds1}];
+                   end
                    J = find(A(:,i)>0);
                    for j=1:size(J,1)
                        A = [A;-A(J(j),:)];
@@ -70,7 +84,7 @@ for nu=1:N
                            A = [A;A(J(k),:)];
                            b = [b;ceil(b(J(j),1)-abs(A(J(j),i)))+1];
                        end
-                       C = {C,{A;b;bnds2}};
+                       C = [C,{A;b;bnds2}];
                    end
                end
            end

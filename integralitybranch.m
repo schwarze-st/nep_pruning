@@ -11,7 +11,7 @@ function [B_lower,B_upper] = integralitybranch(B,xbar,n_nus)
 %   Output
 %       B_lower, B_upper: (3xN)-cell arrays of same type like B
 
-logic = find(abs(xbar-round(xbar))<10^(-5));
+logic = find(abs(xbar-round(xbar))>10^(-5));
 ind = logic(1);
 [p_ind,p_i] = getPlayersIndex(ind,n_nus);
 B_lower = B;

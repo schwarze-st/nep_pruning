@@ -18,6 +18,7 @@ n = size(Goalfs(1,1),1)+size(Goalfs(1,1),2);
 N = size(Omega,2);
 n_nus = zeros(N,1);
 intNE = zeros(n,0);
+klk = zeros(n,0);
 for i=1:N
     n_nus(i,1) = size(Omega(1,1),2);
 end
@@ -25,18 +26,17 @@ end
 while ~isempty(L)
    Y = L{1};
    L(1)=[];
-   size(L,2)
    [xbar,yempty] = gaussseidel(Y,Goalfs,n_nus);
-   xbar
    if ~yempty
        B = prunebranch(Y, Goalfs, n_nus, xbar);
        if size(B,2)>1
            disp('Branched B into more sets');
        end
        if max(abs(round(xbar)-xbar))<10^(-5)
+          klk = [klk,xbar];
           if isdiscreteNE(xbar,Omega,Goalfs,N,n_nus)
               disp('Found discrete NE');
-              intNE = [intNE;xbar]  %#ok<AGROW>
+              intNE = [intNE,xbar];  %#ok<AGROW>
           end
           % Excluding xbar from feasible set
           disp('remove integer point');
@@ -51,6 +51,6 @@ while ~isempty(L)
        L = [L,B];
    end
 end
-
+klk
 end
 

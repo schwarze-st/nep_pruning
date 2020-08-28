@@ -19,8 +19,8 @@ function [flagi,flagii] = checkRequirements(goalfnu, Y, n_nus, xbar, nu, i)
 %       flagii: logical -Requirements for case (ii) are fulfilled
 
 % Calculate Fnuibar
-Qi = goalfnu{2,1}(i,:);
 Ci = goalfnu{1,1}(i,:);
+Qi = goalfnu{2,1}(i,:);
 bi = goalfnu{3,1}(i,1);
 Fnuibar = Qi*getPlayersVector(xbar,nu,n_nus)+Ci*getOpponentsVector(xbar,nu,n_nus)+bi;
 
