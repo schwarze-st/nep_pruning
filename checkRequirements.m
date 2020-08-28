@@ -36,13 +36,17 @@ for mu=1:sum(n_nus)
     activeubnds = abs(xmu-Y{3,mu}(:,2))<10^(-4);
     I = eye(n_nus(mu,1));
     gradlbs = I(:,activelbnds);
-    gradubs = -I(:,activeubnds);       
+    gradubs = -I(:,activeubnds);
+    gradcons = transpose(Y{1,mu}(activeconstr,:));
     if mu==nu
-        gradcons = transpose(Y{2,mu}(activeconstr,:));
         gradFnuibar = Qi';
     else
-        gradcons = transpose(Y{1,mu}(activeconstr,:));    
-        gradFnuibar = Ci';
+        lower = sum(n_nus(1:mu-1,1))+1;
+        if nu<mu
+            lower = lower - n_nus(nu,1);
+        end
+        upper = lower + n_nus(mu,1) -1;
+        gradFnuibar = Ci(1,lower:upper)';
     end
     model.A = sparse([gradcons,gradlbs,gradubs]);
     model.sense = '=';
@@ -50,14 +54,14 @@ for mu=1:sum(n_nus)
     model.lb = zeros(size([gradcons,gradlbs,gradubs],2),1);
     params.OutputFlag = 0;
     if Fnuibar>=0
-        model.rhs = -gradFnuibar;
+        model.rhs = gradFnuibar;
         result = gurobi(model,params);
         if strcmp(result.status,'OPTIMAL')
             logi(mu,1)=1;
         end
     end
     if Fnuibar<=0
-        model.rhs = gradFnuibar;
+        model.rhs = -gradFnuibar;
         result = gurobi(model,params);
         if strcmp(result.status,'OPTIMAL')
             logii(mu,1)=1;
@@ -65,10 +69,10 @@ for mu=1:sum(n_nus)
     end   
     clear model;
 end
-if and(logi==ones(sum(n_nus),1),Fnuibar>=0)
+if all(logi==1)
     flagi = true;
 end
-if and(logii==ones(sum(n_nus),1),Fnuibar<=0)
+if all(logii==1)
     flagii = true;
 end
 end

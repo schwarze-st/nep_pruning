@@ -17,78 +17,71 @@ function [B] = prunebranch(Y, Goalfs, n_nus, xbar)
 %       B: (1 x p)-cell array, with each cell containing a (3xN)-cell array
 %       of type Y.
 
+assert(iscell(Y),'Y has wrong input type');
+assert(iscell(Goalfs),'Goalfs has wrong input type');
+assert(all(size(Goalfs)==[3,sum(n_nus)]),'Goalfs has wrong size');
+assert(all(size(Y)==[3,sum(n_nus)]),'Y has wrong size');
+
 N = size(Y,2);
 B = {Y};
 for nu=1:N
     for i=1:n_nus(nu,1)
-       [flagi,flagii] = checkRequirements(Goalfs(:,nu),Y,n_nus,xbar,nu,i);
-       if flagi
-           for p=1:size(B,2)
-               if (B{p}{3,nu}(i,2)-B{p}{3,nu}(i,1))<10^(-5)
-                   if p==1
-                       C = B(p);
-                   else
-                       C = [C,B(p)];
-                   end
-               else
-                   A = B{p}{1,nu};
-                   b = B{p}{2,nu};
-                   bnds1 = B{p}{3,nu};
-                   bnds2 = B{p}{3,nu};
-                   bnds2(i,1) = bnds2(i,1)+1;
-                   bnds1(i,2) = bnds1(i,1);
-                   if p==1
-                       C = {A;b;bnds1};
-                   else
-                       C = [C,{A;b;bnds1}];
-                   end
-                   J = find(A(:,i)<0);
-                   for j=1:size(J,1)
-                       A = [A;-A(J(j),:)];
-                       b = [b;-ceil(b(J(j),1)-abs(A(J(j),i)))];
-                       for k=1:j-1
-                           A = [A;A(J(k),:)];
-                           b = [b;ceil(b(J(j),1)-abs(A(J(j),i)))+1];
+       if (Y{3,nu}(i,2)-Y{3,nu}(i,1))<10^(-5)
+           % If (nu,i) is already fixed on a value -> Do nothing
+       else
+           [flagi,flagii] = checkRequirements(Goalfs(:,nu),Y,n_nus,xbar,nu,i);
+           if flagi
+               for p=1:size(B,2)
+                       A = B{p}{1,nu};
+                       b = B{p}{2,nu};
+                       bnds1 = B{p}{3,nu};
+                       bnds2 = B{p}{3,nu};
+                       bnds2(i,1) = bnds2(i,1)+1;
+                       bnds1(i,2) = bnds1(i,1);
+                       if p==1
+                           C = {{A;b;bnds1}};
+                       else
+                           C = [C,{A;b;bnds1}];
                        end
-                       C = [C,{A;b;bnds2}];
-                   end
-               end
-           end
-           B=C;
-       end
-       if flagii
-           for p=1:size(B,2)
-               if (B{p}{3,nu}(i,2)-B{p}{3,nu}(i,1))<10^(-5)
-                   if p==1
-                       C = B(p);
-                   else
-                       C = [C,B(p)];
-                   end
-               else
-                   A = B{p}{1,nu};
-                   b = B{p}{2,nu};
-                   bnds1 = B{p}{3,nu};
-                   bnds2 = B{p}{3,nu};
-                   bnds2(i,2) = bnds2(i,2)-1;
-                   bnds1(i,1) = bnds1(i,2);
-                   if p==1
-                        C = {A;b;bnds1};
-                   else
-                        C = [C,{A;b;bnds1}];
-                   end
-                   J = find(A(:,i)>0);
-                   for j=1:size(J,1)
-                       A = [A;-A(J(j),:)];
-                       b = [b;-ceil(b(J(j),1)-abs(A(J(j),i)))];
-                       for k=1:j-1
-                           A = [A;A(J(k),:)];
-                           b = [b;ceil(b(J(j),1)-abs(A(J(j),i)))+1];
+                       J = find(A(:,i)<0);
+                       for j=1:size(J,1)
+                           A = [A;-A(J(j),:)];
+                           b = [b;-ceil(b(J(j),1)-abs(A(J(j),i)))];
+                           for k=1:j-1
+                               A = [A;A(J(k),:)];
+                               b = [b;ceil(b(J(j),1)-abs(A(J(j),i)))+1];
+                           end
+                           C = [C,{A;b;bnds2}];
                        end
-                       C = [C,{A;b;bnds2}];
-                   end
                end
+               B=C;
            end
-           B=C;          
+           if flagii
+               for p=1:size(B,2)
+                       A = B{p}{1,nu};
+                       b = B{p}{2,nu};
+                       bnds1 = B{p}{3,nu};
+                       bnds2 = B{p}{3,nu};
+                       bnds2(i,2) = bnds2(i,2)-1;
+                       bnds1(i,1) = bnds1(i,2);
+                       if p==1
+                            C = {{A;b;bnds1}};
+                       else
+                            C = [C,{A;b;bnds1}];
+                       end
+                       J = find(A(:,i)>0);
+                       for j=1:size(J,1)
+                           A = [A;-A(J(j),:)];
+                           b = [b;-ceil(b(J(j),1)-abs(A(J(j),i)))];
+                           for k=1:j-1
+                               A = [A;A(J(k),:)];
+                               b = [b;ceil(b(J(j),1)-abs(A(J(j),i)))+1];
+                           end
+                           C = [C,{A;b;bnds2}];
+                       end
+               end
+               B=C;          
+           end
        end
     end
 end
