@@ -29,9 +29,6 @@ while ~isempty(L)
    [xbar,yempty] = gaussseidel(Y,Goalfs,n_nus);
    if ~yempty
        B = prunebranch(Y, Goalfs, n_nus, xbar);
-       if size(B,2)>1
-           disp('Branched B into more sets');
-       end
        if max(abs(round(xbar)-xbar))<10^(-5)
           klk = [klk,xbar];
           if isdiscreteNE(xbar,Omega,Goalfs,N,n_nus)
@@ -49,8 +46,6 @@ while ~isempty(L)
            B = [{B_1},{B_2},B(2:end)];
        end
        L = [L,B];
-   else
-       disp('Remove empty Box');
    end
 end
 klk

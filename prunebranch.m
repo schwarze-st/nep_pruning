@@ -45,6 +45,11 @@ for nu=1:N
                    A = B{p}{1,nu};
                    b = B{p}{2,nu};
                    J = find(A(:,i)<0);
+                   xbarnu = getPlayersVector(xbar,nu,n_nus);
+                   boundactive = xbarnu(i)<=B_plus{3,nu}(i,1)+10^(-4);
+                   if ~boundactive
+                       J = resortJ(J,A,b,xbarnu,i);
+                   end
                    for j=1:size(J,1)
                        B_plus = B{p};
                        B_plus{1,nu} = [A;-A(J(j),:)];
@@ -54,7 +59,11 @@ for nu=1:N
                        A = B{p}{1,nu};
                        b = B{p}{2,nu};
                        assert(all(size(B_plus)==[3,size(n_nus,1)]),"strategy subset has false dimensions");
-                       C = [C,{B_plus}];
+                       if and(~boundactive,and(j==1,p==1))
+                           C = [{B_plus},C];
+                       else
+                           C = [C,{B_plus}];
+                       end
                    end
                end
                B=C;
@@ -74,6 +83,11 @@ for nu=1:N
                    A = B{p}{1,nu};
                    b = B{p}{2,nu};
                    J = find(A(:,i)>0);
+                   xbarnu = getPlayersVector(xbar,nu,n_nus);
+                   boundactive = xbarnu(i)>=B_plus{3,nu}(i,2)-10^(-4);
+                   if ~boundactive
+                       J = resortJ(J,A,b,xbarnu,i);
+                   end
                    for j=1:size(J,1)
                        B_plus = B{p};
                        B_plus{1,nu} = [A;-A(J(j),:)];
@@ -83,7 +97,11 @@ for nu=1:N
                        A = B{p}{1,nu};
                        b = B{p}{2,nu};
                        assert(all(size(B_plus)==[3,size(n_nus,1)]),"strategy subset has false dimensions");
-                       C = [C,{B_plus}];
+                       if and(~boundactive,and(j==1,p==1))
+                           C = [{B_plus},C];
+                       else
+                           C = [C,{B_plus}];
+                       end
                    end
                end
                B=C;
