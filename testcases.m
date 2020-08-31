@@ -43,3 +43,8 @@ assert(~isdiscreteNE([0;0],Omega,Gf,2,[1;1]),'Error in isdiscreteNE');
 assert(~isdiscreteNE([-1;1],Omega,Gf,2,[1;1]),'Error in isdiscreteNE');
 
 branchingmethod(Omega,Gf)
+
+L={1,2,3,4,5,6};
+while ~isempty(L)
+    L(1)=[];
+end

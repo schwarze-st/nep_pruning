@@ -14,13 +14,13 @@ function [intNE] = branchingmethod(Omega,Goalfs)
 %    Output: intNE: (p x n)-matrix containing p Nash equilibrium points, one in
 
 L = {Omega};
-n = size(Goalfs(1,1),1)+size(Goalfs(1,1),2);
+n = size(Goalfs{1,1},1)+size(Goalfs{1,1},2);
 N = size(Omega,2);
 n_nus = zeros(N,1);
 intNE = zeros(n,0);
 klk = zeros(n,0);
 for i=1:N
-    n_nus(i,1) = size(Omega(1,1),2);
+    n_nus(i,1) = size(Goalfs{1,i},1);
 end
 
 while ~isempty(L)
@@ -49,6 +49,8 @@ while ~isempty(L)
            B = [{B_1},{B_2},B(2:end)];
        end
        L = [L,B];
+   else
+       disp('Remove empty Box');
    end
 end
 klk

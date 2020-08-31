@@ -5,7 +5,7 @@ flag = true;
 for nu=1:N
     xnu = getPlayersVector(xbar, nu, n_nus);
     xminusnu = getOpponentsVector(xbar, nu, n_nus);
-    z = xnu'*Goalfs{1,nu}*xminusnu + 0.5*xnu'*Goalfs{2,nu}*xnu + Goalfs{3,nu}*xnu;
+    z = xnu'*Goalfs{1,nu}*xminusnu + 0.5*xnu'*Goalfs{2,nu}*xnu + xnu'*Goalfs{3,nu};
     
     model.Q = sparse(0.5*Goalfs{2,nu});
     model.obj = Goalfs{1,nu}*xminusnu+Goalfs{3,nu};

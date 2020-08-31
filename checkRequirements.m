@@ -27,9 +27,9 @@ Fnuibar = Qi*getPlayersVector(xbar,nu,n_nus)+Ci*getOpponentsVector(xbar,nu,n_nus
 % Check if case (i)/(ii) is fulfilled
 flagi = false;
 flagii= false;
-logi = zeros(sum(n_nus),1);
-logii = zeros(sum(n_nus),1);
-for mu=1:sum(n_nus)
+logi = zeros(size(n_nus,1),1);
+logii = zeros(size(n_nus,1),1);
+for mu=1:size(n_nus,1)
     xmu = getPlayersVector(xbar, mu, n_nus);
     activeconstr = abs(Y{1,mu}*xmu-Y{2,mu})<10^(-4);
     activelbnds = abs(xmu-Y{3,mu}(:,1))<10^(-4);
