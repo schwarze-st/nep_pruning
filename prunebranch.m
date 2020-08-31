@@ -48,9 +48,9 @@ for nu=1:N
                    for j=1:size(J,1)
                        B_plus = B{p};
                        B_plus{1,nu} = [A;-A(J(j),:)];
-                       B_plus{2,nu} = [b;-ceil(b(J(j),1)-abs(A(J(j),i)))];
+                       B_plus{2,nu} = [b;floor(-(b(J(j),1)+abs(A(J(j),i))))];
                        B{p}{1,nu} = [A;A(J(j),:)];
-                       B{p}{2,nu} = [b;ceil(b(J(j),1)-abs(A(J(j),i)))+1];
+                       B{p}{2,nu} = [b;-(floor(-(b(J(j),1)+abs(A(J(j),i))))+1)];
                        A = B{p}{1,nu};
                        b = B{p}{2,nu};
                        assert(all(size(B_plus)==[3,size(n_nus,1)]),"strategy subset has false dimensions");
@@ -77,9 +77,9 @@ for nu=1:N
                    for j=1:size(J,1)
                        B_plus = B{p};
                        B_plus{1,nu} = [A;-A(J(j),:)];
-                       B_plus{2,nu} = [b;-ceil(b(J(j),1)-abs(A(J(j),i)))];
+                       B_plus{2,nu} = [b;floor(-(b(J(j),1)+abs(A(J(j),i))))];
                        B{p}{1,nu} = [A;A(J(j),:)];
-                       B{p}{2,nu} = [b;ceil(b(J(j),1)-abs(A(J(j),i)))+1];
+                       B{p}{2,nu} = [b;-(floor(-(b(J(j),1)+abs(A(J(j),i))))+1)];
                        A = B{p}{1,nu};
                        b = B{p}{2,nu};
                        assert(all(size(B_plus)==[3,size(n_nus,1)]),"strategy subset has false dimensions");
