@@ -44,8 +44,8 @@ while ~isempty(L)
            % Branching step towards integer solution
            if pointfeasible(B{1},xbar,n_nus)
                disp('Branch to integers');
-               [B_1,B_2] = integralitybranch(B{1},xbar,n_nus);
-               B = [{B_1},{B_2},B(2:end)];
+               [B_int] = integralitybranch(B{1},xbar,n_nus);
+               B = [B_int,B(2:end)];
            end
        end
        L = [L,B];

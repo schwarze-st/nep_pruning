@@ -1,4 +1,4 @@
-function [B_lower,B_upper] = integralitybranch(B,xbar,n_nus)
+function B_int = integralitybranch(B,xbar,n_nus)
 % Create a partition in two sets, such that one component in xbar) is
 % driven to integer values
 %   Input:
@@ -9,7 +9,10 @@ function [B_lower,B_upper] = integralitybranch(B,xbar,n_nus)
 %       xbar (n x 1) Vector
 %       n_nus (N x 1) Vector
 %   Output
-%       B_lower, B_upper: (3xN)-cell arrays of same type like B
+%       B_int (1x?) cell-array containing nonempty strategy subsets       
+%B_lower, B_upper: (3xN)-cell arrays of same type like B
+
+B_int = cell(1,0);
 
 logic = find(abs(xbar-round(xbar))>10^(-5));
 ind = logic(1);
@@ -17,6 +20,11 @@ ind = logic(1);
 B_lower = B;
 B_upper = B;
 B_lower{3,p_ind}(p_i,2) = floor(xbar(ind));
+if ~setempty(B_lower,n_nus)
+    B_int = [B_int,{B_lower}];
+end
 B_upper{3,p_ind}(p_i,1) = ceil(xbar(ind));
+if ~setempty(B_upper,n_nus)
+    B_int = [B_int,{B_upper}];
 end
 
