@@ -17,13 +17,15 @@ function [B] = prunebranch(Y, Goalfs, n_nus, xbar)
 %       B: (1 x p)-cell array, with each cell containing a (3xN)-cell array
 %       of type Y.
 
+N = size(n_nus,1);
+B = {Y};
+
 assert(iscell(Y),'Y has wrong input type');
 assert(iscell(Goalfs),'Goalfs has wrong input type');
-assert(all(size(Goalfs)==[3,size(n_nus,1)]),'Goalfs has wrong size');
-assert(all(size(Y)==[3,size(n_nus,1)]),'Y has wrong size');
+assert(all(size(Goalfs)==[3,N]),'Goalfs has wrong size');
+assert(all(size(Y)==[3,N]),'Y has wrong size');
 
-N = size(Y,2);
-B = {Y};
+
 for nu=1:N
     for i=1:n_nus(nu,1)
        if (Y{3,nu}(i,2)-Y{3,nu}(i,1))<10^(-5)
@@ -31,17 +33,13 @@ for nu=1:N
        else
            [flagi,flagii] = checkRequirements(Goalfs(:,nu),Y,n_nus,xbar,nu,i);
            if flagi
+               C = cell(1,0);
                for p=1:size(B,2)
-                   % First set: B_plus on lower bound
                    B_plus = B{p};
                    B_plus{3,nu}(i,2) = B_plus{3,nu}(i,1);
                    B{p}{3,nu}(i,1) = B_plus{3,nu}(i,1)+1;
-                   assert(all(size(B_plus)==[3,size(n_nus,1)]),"strategy subset has false dimensions");
-                   if p==1
-                       C = {B_plus};
-                   else
-                       C = [C,{B_plus}];
-                   end
+                   assert(all(size(B_plus)==[3,N]),"strategy subset has false dimensions");
+                   C = [C,{B_plus}];
                    A = B{p}{1,nu};
                    b = B{p}{2,nu};
                    J = find(A(:,i)<0);
@@ -53,12 +51,12 @@ for nu=1:N
                    for j=1:size(J,1)
                        B_plus = B{p};
                        B_plus{1,nu} = [A;-A(J(j),:)];
-                       B_plus{2,nu} = [b;floor(-(b(J(j),1)+abs(A(J(j),i))))];
+                       B_plus{2,nu} = [b;floor(-(b(J(j),1)-abs(A(J(j),i))))];
                        B{p}{1,nu} = [A;A(J(j),:)];
-                       B{p}{2,nu} = [b;-(floor(-(b(J(j),1)+abs(A(J(j),i))))+1)];
+                       B{p}{2,nu} = [b;-(floor(-(b(J(j),1)-abs(A(J(j),i))))+1)];
                        A = B{p}{1,nu};
                        b = B{p}{2,nu};
-                       assert(all(size(B_plus)==[3,size(n_nus,1)]),"strategy subset has false dimensions");
+                       assert(all(size(B_plus)==[3,N]),"strategy subset has false dimensions");
                        if and(~boundactive,and(j==1,p==1))
                            C = [{B_plus},C];
                        else
@@ -69,17 +67,13 @@ for nu=1:N
                B=C;
            end
            if flagii
+               C = cell(1,0);
                for p=1:size(B,2)
-                   % First set: B_plus on upper bound
                    B_plus = B{p};
                    B_plus{3,nu}(i,1) = B_plus{3,nu}(i,2);
                    B{p}{3,nu}(i,2) = B_plus{3,nu}(i,2)-1;
-                   assert(all(size(B_plus)==[3,size(n_nus,1)]),"strategy subset has false dimensions");
-                   if p==1
-                       C = {B_plus};
-                   else
-                       C = [C,{B_plus}];
-                   end
+                   assert(all(size(B_plus)==[3,N]),"strategy subset has false dimensions");
+                   C = [C,{B_plus}];
                    A = B{p}{1,nu};
                    b = B{p}{2,nu};
                    J = find(A(:,i)>0);
@@ -91,12 +85,12 @@ for nu=1:N
                    for j=1:size(J,1)
                        B_plus = B{p};
                        B_plus{1,nu} = [A;-A(J(j),:)];
-                       B_plus{2,nu} = [b;floor(-(b(J(j),1)+abs(A(J(j),i))))];
+                       B_plus{2,nu} = [b;floor(-(b(J(j),1)-abs(A(J(j),i))))];
                        B{p}{1,nu} = [A;A(J(j),:)];
-                       B{p}{2,nu} = [b;-(floor(-(b(J(j),1)+abs(A(J(j),i))))+1)];
+                       B{p}{2,nu} = [b;-(floor(-(b(J(j),1)-abs(A(J(j),i))))+1)];
                        A = B{p}{1,nu};
                        b = B{p}{2,nu};
-                       assert(all(size(B_plus)==[3,size(n_nus,1)]),"strategy subset has false dimensions");
+                       assert(all(size(B_plus)==[3,N]),"strategy subset has false dimensions");
                        if and(~boundactive,and(j==1,p==1))
                            C = [{B_plus},C];
                        else

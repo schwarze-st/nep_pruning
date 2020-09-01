@@ -9,9 +9,10 @@ function [intNE] = branchingmethod(Omega,Goalfs)
 %                C (n_nu x n-n_nu)-matrix,
 %                Q (n_nu x n_nu)-matrix,
 %                b (n_nu x 1)-vector.
-%                    deccribe the nu-th players goalfunction
+%                    in each column. Describes the nu-th players goalfunction
 %                    1/2* x_nu'*C*x_nu + (C*x_-nu + b)'x_nu
-%    Output: intNE: (p x n)-matrix containing p Nash equilibrium points, one in
+%    Output: intNE: (n x p)-matrix containing Nash equilibrium points in
+%                   columns
 
 L = {Omega};
 n = size(Goalfs{1,1},1)+size(Goalfs{1,1},2);
@@ -41,13 +42,15 @@ while ~isempty(L)
           B = [B_list,B(2:end)];
        else
            % Branching step towards integer solution
-           disp('Branch to integers');
-           [B_1,B_2] = integralitybranch(B{1},xbar,n_nus);
-           B = [{B_1},{B_2},B(2:end)];
+           if pointfeasible(B{1},xbar,n_nus)
+               disp('Branch to integers');
+               [B_1,B_2] = integralitybranch(B{1},xbar,n_nus);
+               B = [{B_1},{B_2},B(2:end)];
+           end
        end
        L = [L,B];
    end
 end
-klk
+%assert(size(unique(transpose(klk),'rows'),1)==size(klk,2),'Integer Point processes two times');
 end
 

@@ -2,16 +2,8 @@ function [xbar,flag_empty] = gaussseidel(Y,Goalfs,n_nus)
 % Gauss-Seidel Procedure to calculate continuous Nash-equilibrium for (NEP) 
 %   Input:
 %       Y (3xN) cell-array: Strategy subset 
-%                A (m_nu x n_nu)-matrix,
-%                b (m_nu x 1)-vector,
-%                bnd (n_nu x 2)-matrix,
-%                    describe linear contrained strategy set of player nu
-%       Goalfs: (3 x N)-cell array containing N cells with:
-%                C (n_nu x n-n_nu)-matrix,
-%                Q (n_nu x n_nu)-matrix,
-%                b (n_nu x 1)-vector.
-%                    deccribe the nu-th players goalfunction
-%                    1/2* x_nu'*C*x_nu + (C*x_-nu + b)'x_nu
+%       Goalfs: (3 x N) cell-array: Goalfunctions
+%       n_nus: (Nx1)-vector
 %    Output: 
 %       xbar: continuous Nash-equilibrium of the game (if it
 %           converged)

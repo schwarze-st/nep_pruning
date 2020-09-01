@@ -1,16 +1,8 @@
 function [flagi,flagii] = checkRequirements(goalfnu, Y, n_nus, xbar, nu, i)
 %Checks, if the requirements of Pruning Theorem for (i)/(ii) are fulfilled
 %   Input:
-%       goalfnu: (3 x 1)-cell vector containing 3 cells with:
-%            C (n_nu x n-n_nu)-matrix,
-%            Q (n_nu x n_nu)-matrix,
-%            b (n_nu x 1)-vector.
-%                deccribe the nu-th players goalfunction
-%                1/2* x_nu'*Q*x_nu + (C*x_-nu + b)'x_nu
-%       Y: (3xN)-cell array
-%           B(1,nu): A^nu (m_nu x n_nu) Matrix
-%           B(2,nu): b^nu (m_nu x 1) Vector
-%           B(3,nu): bnd^nu (n_nu x 2) Matrix
+%       goalfnu: (3 x 1)-cell vector with goalfunction:
+%       Y: (3xN)-cell array: strategy subset
 %       xbar: (n x 1)-vector
 %       nu:     integer -Playernr.
 %       i:      integer -Players-index of variable
