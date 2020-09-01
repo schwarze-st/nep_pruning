@@ -1,5 +1,8 @@
-function Jnew = resortJ(J,A,b,xbarnu,i)
+function [Jnew,lbactive,ubactive] = getJ(B_plus,A,b,xbar,nu,i,n_nus)
 % changes the order of J, such that the first box contains xbar
+
+J = find(A(:,i)<0);
+xbarnu = getPlayersVector(xbar,nu,n_nus);
 Jnew = zeros(size(J,1),1);
 Jnew(1,1) = J(1,1);
 for k=2:size(J,1)
@@ -12,4 +15,7 @@ for k=2:size(J,1)
         Jnew(k,1)=J(k,1);
     end
 end
+lbactive = xbarnu(i)<=B_plus{3,nu}(i,1)+10^(-4);
+ubactive = xbarnu(i)>=B_plus{3,nu}(i,2)-10^(-4);
+
 

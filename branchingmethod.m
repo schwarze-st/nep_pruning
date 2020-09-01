@@ -51,6 +51,7 @@ while ~isempty(L)
        L = [L,B];
    end
 end
+klk
 %assert(size(unique(transpose(klk),'rows'),1)==size(klk,2),'Integer Point processes two times');
 end
 
