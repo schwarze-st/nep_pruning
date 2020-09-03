@@ -14,6 +14,10 @@ function [intNE] = branchingmethod(Omega,Goalfs)
 %    Output: intNE: (n x p)-matrix containing Nash equilibrium points in
 %                   columns
 
+global OPT_TOL FEAS_TOL;
+OPT_TOL = 10^(-5);
+FEAS_TOL = 10^(-5);
+
 L = {Omega};
 n = size(Goalfs{1,1},1)+size(Goalfs{1,1},2);
 N = size(Omega,2);

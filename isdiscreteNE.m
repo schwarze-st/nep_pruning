@@ -26,7 +26,7 @@ for nu=1:N
     params.OutputFlag = 0;
     result = gurobi(model,params);
     result.x;
-    if abs(result.objval-z)>10^(-4)
+    if abs(result.objval-z)>OPT_TOL
         flag = false;
         break;
     end

@@ -14,7 +14,7 @@ xbarnew = zeros(sum(n_nus),1);
 iter = 1;
 flag_empty = false;
 
-while max(abs(xbar-xbarnew))>10^(-4)
+while max(abs(xbar-xbarnew))>FEAS_TOL
     xbar = xbarnew;
     if iter>100
         disp('Gauss Seidel terminated without convergence');
