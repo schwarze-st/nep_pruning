@@ -1,7 +1,8 @@
 function flag = setempty(Y, n_nus)
 % Looks if the strategy set, defined by Y is non-empty
 %   Input:
-%       (3 x N) cell-array: strategy subset
+%       Y (3 x N) cell-array: strategy subset
+%       n_nus (n x 1) vector
 %   Output:
 %       logical: flag true, if Y is empty
 

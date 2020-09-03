@@ -1,8 +1,12 @@
 function [xminusnu] = getOpponentsVector(x, nu, n_nus)
 %returns the vector of all variables, excepts the ones controlled by player nu
-%   x: (n x 1)-vector of all vars
-%   nu: integer number of player
-%   n_nus: (N x 1)-vector with number of vars for each player
+%   Input:
+%       x: (n x 1)-vector of all vars
+%       nu: integer number of player
+%       n_nus: (N x 1)-vector with number of vars for each player
+%   Output:
+%       xminusnu: ((n-n_nu) x 1) vector
+
 lower = 1;
 iter = 1;
 while iter<nu

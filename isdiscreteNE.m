@@ -1,5 +1,13 @@
 function [flag] = isdiscreteNE(xbar, Omega, Goalfs, N, n_nus)
 % proofs, if xbar is a discrete Nash equilibrium of the game
+%   Input:
+%       xbar (n x 1) vector
+%       B_plus (3 x N) cell-array: strategy set
+%       Goalfs (3 x N) cell-array
+%       N (int)
+%       n_nus (n x 1) vector
+%   Output:
+%       flag (logical)
 
 flag = true;
 for nu=1:N

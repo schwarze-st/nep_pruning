@@ -1,5 +1,17 @@
 function [Jnew,lbactive,ubactive] = getJ(B_plus,A,b,xbar,nu,i,n_nus)
 % changes the order of J, such that the first box contains xbar
+%   Input:
+%       B_plus (3 x N) cell-array: strategy subset
+%       A (m_nu x n_nu) matrix
+%       b (m_nu x 1) vector
+%       xbar (n x 1) vector
+%       nu  (int)
+%       i   (int)
+%       n_nu (n x 1) vector
+%   Output:
+%       J_new (? x 1) vector (?: Number of active constrs)
+%       lbactive (logical)
+%       ubactive (logical)
 
 J = find(A(:,i)<0);
 xbarnu = getPlayersVector(xbar,nu,n_nus);

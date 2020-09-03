@@ -9,8 +9,7 @@ function B_int = integralitybranch(B,xbar,n_nus)
 %       xbar (n x 1) Vector
 %       n_nus (N x 1) Vector
 %   Output
-%       B_int (1x?) cell-array containing nonempty strategy subsets       
-%B_lower, B_upper: (3xN)-cell arrays of same type like B
+%       B_int (1x1) or (1x2) cell-array containing nonempty strategy subsets       
 
 B_int = cell(1,0);
 
