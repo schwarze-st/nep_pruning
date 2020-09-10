@@ -9,6 +9,8 @@ function [flag] = isdiscreteNE(xbar, Omega, Goalfs, N, n_nus)
 %   Output:
 %       flag (logical)
 
+global OPT_TOL
+
 flag = true;
 for nu=1:N
     xnu = getPlayersVector(xbar, nu, n_nus);

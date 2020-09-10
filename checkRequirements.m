@@ -9,6 +9,7 @@ function [flagi,flagii] = checkRequirements(goalfnu, Y, n_nus, xbar, nu, i)
 %   Output:
 %       flagi:  logical -Requirements for case (i) are fulfilled
 %       flagii: logical -Requirements for case (ii) are fulfilled
+global FEAS_TOL
 
 % Calculate Fnuibar
 Ci = goalfnu{1,1}(i,:);

@@ -17,6 +17,7 @@ function [B] = prunebranch(Y, Goalfs, n_nus, xbar)
 %       B: (1 x p)-cell array, with each cell containing a (3xN)-cell array
 %       of type Y.
 
+global FEAS_TOL
 N = size(n_nus,1);
 B = {Y};
 
@@ -28,7 +29,7 @@ assert(all(size(Y)==[3,N]),'Y has wrong size');
 
 for nu=1:N
     for i=1:n_nus(nu,1)
-       if (Y{3,nu}(i,2)-Y{3,nu}(i,1))<10^(-5)
+       if ((Y{3,nu}(i,2)-Y{3,nu}(i,1))<FEAS_TOL)
            % If (nu,i) is already fixed on a value -> Do nothing
        else
            [flagi,flagii] = checkRequirements(Goalfs(:,nu),Y,n_nus,xbar,nu,i);
@@ -42,7 +43,7 @@ for nu=1:N
                    C = [C,{B_plus}];
                    A = B{p}{1,nu};
                    b = B{p}{2,nu};
-                   [J,lbactive,~] = getJ(B_plus,A,b,xbar,nu,i,n_nus);
+                   [J,lbactive,~] = getJ(B_plus,A,b,xbar,nu,i,n_nus,'-');
                    for j=1:size(J,1)
                        B_plus = B{p};
                        B_plus{1,nu} = [A;-A(J(j),:)];
@@ -71,7 +72,7 @@ for nu=1:N
                    C = [C,{B_plus}];
                    A = B{p}{1,nu};
                    b = B{p}{2,nu};
-                   [J,~,ubactive] = getJ(B_plus,A,b,xbar,nu,i,n_nus);
+                   [J,~,ubactive] = getJ(B_plus,A,b,xbar,nu,i,n_nus,'+');
                    for j=1:size(J,1)
                        B_plus = B{p};
                        B_plus{1,nu} = [A;-A(J(j),:)];

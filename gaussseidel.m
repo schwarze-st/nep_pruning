@@ -9,6 +9,8 @@ function [xbar,flag_empty] = gaussseidel(Y,Goalfs,n_nus)
 %           converged)
 %       flag-empty: logical: returns true, if Y is an empty set
 
+global FEAS_TOL
+
 xbar = ones(sum(n_nus),1);
 xbarnew = zeros(sum(n_nus),1);
 iter = 1;
@@ -35,6 +37,7 @@ while max(abs(xbar-xbarnew))>FEAS_TOL
         if strcmp(result.status,'INFEASIBLE')
             flag_empty = true;
             xbar=xbarnew;
+            clear model
             break
         else
             xbarnew = setPlayersVector(xbarnew,result.x,nu,n_nus);
