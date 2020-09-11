@@ -28,7 +28,7 @@ assert(all(size(Y)==[3,N]),'Y has wrong size');
 
 
 for nu=1:N
-    for i=1:n_nus(nu,1)
+    for i=1:n_nus(nu)
        if ((Y{3,nu}(i,2)-Y{3,nu}(i,1))<FEAS_TOL)
            % If (nu,i) is already fixed on a value -> Do nothing
        else
@@ -38,21 +38,21 @@ for nu=1:N
                for p=1:size(B,2)
                    B_plus = B{p};
                    B_plus{3,nu}(i,2) = B_plus{3,nu}(i,1);
-                   B{p}{3,nu}(i,1) = B_plus{3,nu}(i,1)+1;
-                   assert(all(size(B_plus)==[3,N]),"strategy subset has false dimensions");
+                   B{p}{3,nu}(i,1) = B{p}{3,nu}(i,1)+1;
                    C = [C,{B_plus}];
                    A = B{p}{1,nu};
                    b = B{p}{2,nu};
                    [J,lbactive,~] = getJ(B_plus,A,b,xbar,nu,i,n_nus,'-');
                    for j=1:size(J,1)
+                       alpha = -A(J(j),:);
+                       rhs = floor(-(b(J(j))+A(J(j),i)));
                        B_plus = B{p};
-                       B_plus{1,nu} = [A;-A(J(j),:)];
-                       B_plus{2,nu} = [b;floor(-(b(J(j),1)-abs(A(J(j),i))))];
-                       B{p}{1,nu} = [A;A(J(j),:)];
-                       B{p}{2,nu} = [b;-(floor(-(b(J(j),1)-abs(A(J(j),i))))+1)];
+                       B_plus{1,nu} = [A;alpha];
+                       B_plus{2,nu} = [b;rhs];
+                       B{p}{1,nu} = [A;-alpha];
+                       B{p}{2,nu} = [b;-(rhs+1)];
                        A = B{p}{1,nu};
                        b = B{p}{2,nu};
-                       assert(all(size(B_plus)==[3,N]),"strategy subset has false dimensions");
                        if and(~lbactive,and(j==1,p==1))
                            C = [{B_plus},C];
                        else
@@ -67,21 +67,21 @@ for nu=1:N
                for p=1:size(B,2)
                    B_plus = B{p};
                    B_plus{3,nu}(i,1) = B_plus{3,nu}(i,2);
-                   B{p}{3,nu}(i,2) = B_plus{3,nu}(i,2)-1;
-                   assert(all(size(B_plus)==[3,N]),"strategy subset has false dimensions");
+                   B{p}{3,nu}(i,2) = B{p}{3,nu}(i,2)-1;
                    C = [C,{B_plus}];
                    A = B{p}{1,nu};
                    b = B{p}{2,nu};
                    [J,~,ubactive] = getJ(B_plus,A,b,xbar,nu,i,n_nus,'+');
                    for j=1:size(J,1)
+                       alpha = -A(J(j),:);
+                       rhs = floor(-(b(J(j))+A(J(j),i)));
                        B_plus = B{p};
-                       B_plus{1,nu} = [A;-A(J(j),:)];
-                       B_plus{2,nu} = [b;floor(-(b(J(j),1)-abs(A(J(j),i))))];
-                       B{p}{1,nu} = [A;A(J(j),:)];
-                       B{p}{2,nu} = [b;-(floor(-(b(J(j),1)-abs(A(J(j),i))))+1)];
+                       B_plus{1,nu} = [A;alpha];
+                       B_plus{2,nu} = [b;rhs];
+                       B{p}{1,nu} = [A;-alpha];
+                       B{p}{2,nu} = [b;-(rhs+1)];
                        A = B{p}{1,nu};
                        b = B{p}{2,nu};
-                       assert(all(size(B_plus)==[3,N]),"strategy subset has false dimensions");
                        if and(~ubactive,and(j==1,p==1))
                            C = [{B_plus},C];
                        else

@@ -18,7 +18,7 @@ flag_empty = false;
 
 while max(abs(xbar-xbarnew))>FEAS_TOL
     xbar = xbarnew;
-    if iter>100
+    if iter>50
         disp('Gauss Seidel terminated without convergence');
         break;
     end
@@ -40,11 +40,15 @@ while max(abs(xbar-xbarnew))>FEAS_TOL
             clear model
             break
         else
+            assert(strcmp(result.status,'OPTIMAL'),'Error: Gauss-Seidl Iteration not Optimal or Infeasible');
             xbarnew = setPlayersVector(xbarnew,result.x,nu,n_nus);
         end
         clear model
     end
     iter = iter+1;
+end
+if ~flag_empty
+    assert(pointfeasible(Y,xbar,n_nus),'Error: Gauss-Seidel Procedure produced infeasible point');
 end
 end
 

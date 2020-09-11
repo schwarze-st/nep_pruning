@@ -44,7 +44,7 @@ while ~isempty(L)
           B_list = removexbarbranch(B{1},xbar,n_nus);
           B = [B_list,B(2:end)];
        else
-           % Branching step towards integer solution
+           % if not branched out by pruningprocedure: Branching step towards integer solution
            if pointfeasible(B{1},xbar,n_nus)
                [B_int] = integralitybranch(B{1},xbar,n_nus);
                B = [B_int,B(2:end)];
@@ -54,6 +54,6 @@ while ~isempty(L)
    end
 end
 size(klk,2)
-%assert(size(unique(transpose(klk),'rows'),1)==size(klk,2),'Integer Point processes two times');
+assert(size(unique(transpose(klk),'rows'),1)==size(klk,2),'Integer Point processes two times');
 end
 

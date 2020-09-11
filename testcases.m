@@ -1,4 +1,8 @@
 % Testscript
+global OPT_TOL FEAS_TOL;
+OPT_TOL = 10^(-5);
+FEAS_TOL = 10^(-5);
+
 % Test getter functions
 x = [1,2,3,4,3,3,2,4,6,8,0,4,2,1]';
 n_nus = [4,4,3,3]';
@@ -43,12 +47,14 @@ assert(~isdiscreteNE([0;0],Omega,Gf,2,[1;1]),'Error in isdiscreteNE');
 assert(~isdiscreteNE([-1;1],Omega,Gf,2,[1;1]),'Error in isdiscreteNE');
 
 % Test getRandomNEP
-N = 2;
-n_nus = [2,2]';
-m_nus = [4,4]';
-lb = -5;
-ub = 5;
-[Omega,Gf] = getRandomNEP(N,lb,ub,n_nus,m_nus);
+% N = 2;
+% n_nus = [2,2]';
+% m_nus = [4,4]';
+% lb = -5;
+% ub = 5;
+clear all
+load('rg22_2.mat')
+%[Omega,Gf] = getRandomNEP(N,lb,ub,n_nus,m_nus);
 branchingmethod(Omega,Gf)
 
 

@@ -15,10 +15,10 @@ for nu=1:N
     
     for k=1:m
         nonz_ind = randperm(n,nonz_count(k));
-        nonz_val = max(2,round(1.5*randn(nonz_count(k),1))+5)
+        nonz_val = max(2,round(1.5*randn(nonz_count(k),1))+5);
         for l=1:nonz_count(k)
             if rand(1)<0.5
-                nonz_val(l) = -nonz_val(l)    
+                nonz_val(l) = -nonz_val(l);  
             end
             A(k,nonz_ind(l)) = nonz_val(l);
         end
