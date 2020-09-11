@@ -52,9 +52,11 @@ assert(~isdiscreteNE([-1;1],Omega,Gf,2,[1;1]),'Error in isdiscreteNE');
 % m_nus = [4,4]';
 % lb = -5;
 % ub = 5;
-clear all
-load('rg22.mat')
+% clear all
+% load('rg22.mat')
 %[Omega,Gf] = getRandomNEP(N,lb,ub,n_nus,m_nus);
+clear all
+load('rg32_1');
 branchingmethod(Omega,Gf)
 
 
