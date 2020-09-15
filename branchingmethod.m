@@ -18,19 +18,25 @@ global OPT_TOL FEAS_TOL;
 OPT_TOL = 10^(-5);
 FEAS_TOL = 10^(-5);
 
-L = {Omega};
 n = size(Goalfs{1,1},1)+size(Goalfs{1,1},2);
-N = size(Omega,2);
+N = size(Goalfs,2);
 n_nus = zeros(N,1);
-intNE = zeros(n,0);
-klk = zeros(n,0);
 for i=1:N
     n_nus(i,1) = size(Goalfs{1,i},1);
 end
+tmp = cell(3,1);
+tmp{1} = zeros(N,max(n_nus));
+tmp{2} = zeros(N,max(n_nus));
+Omega = [Omega,tmp];
+L = cell(1,10000);
+L{1} = Omega;
+intNE = zeros(n,0);
+klk = zeros(n,0);
 
-while ~isempty(L)
-   Y = L{1};
-   L(1)=[];
+while ~all(cellfun('isempty',L))
+   ind = find(~cellfun('isempty',L),1);
+   Y = L{ind};
+   L{ind}= zeros(0,0);
    [xbar,yempty] = gaussseidel(Y,Goalfs,n_nus);
    if ~yempty
        B = prunebranch(Y, Goalfs, n_nus, xbar);
@@ -46,14 +52,15 @@ while ~isempty(L)
        else
            % if not branched out by pruningprocedure: Branching step towards integer solution
            if pointfeasible(B{1},xbar,n_nus)
-               [B_int] = integralitybranch(B{1},xbar,n_nus);
-               B = [B_int,B(2:end)];
+               B_int = integralitybranch(B{1},xbar,n_nus);
+               B{1} = zeros(0,0);
+               B = addCells(B,B_int);
            end
        end
-       L = [L,B];
+       L = addCells(L,B);
    end
 end
 size(klk,2)
-assert(size(unique(transpose(klk),'rows'),1)==size(klk,2),'Integer Point processes two times');
+assert(size(unique(transpose(klk),'rows'),1)==size(klk,2),'Integer Point processed two times');
 end
 

@@ -24,18 +24,19 @@ B = {Y};
 assert(iscell(Y),'Y has wrong input type');
 assert(iscell(Goalfs),'Goalfs has wrong input type');
 assert(all(size(Goalfs)==[3,N]),'Goalfs has wrong size');
-assert(all(size(Y)==[3,N]),'Y has wrong size');
+assert(all(size(Y)==[3,N+1]),'Y has wrong size');
 
 
 for nu=1:N
     for i=1:n_nus(nu)
-       if ((Y{3,nu}(i,2)-Y{3,nu}(i,1))<FEAS_TOL)
+       if (((Y{3,nu}(i,2)-Y{3,nu}(i,1))<FEAS_TOL)||(Y{1,N+1}(nu,i)==1 || Y{2,N+1}(nu,i)==1))
            % If (nu,i) is already fixed on a value -> Do nothing
        else
            [flagi,flagii] = checkRequirements(Goalfs(:,nu),Y,n_nus,xbar,nu,i);
            if flagi
                C = cell(1,0);
                for p=1:size(B,2)
+                   B{p}{1,N+1}(nu,i)=1;
                    B_plus = B{p};
                    B_plus{3,nu}(i,2) = B_plus{3,nu}(i,1);
                    B{p}{3,nu}(i,1) = B{p}{3,nu}(i,1)+1;
@@ -65,6 +66,7 @@ for nu=1:N
            if flagii
                C = cell(1,0);
                for p=1:size(B,2)
+                   B{p}{2,N+1}(nu,i)=1;
                    B_plus = B{p};
                    B_plus{3,nu}(i,1) = B_plus{3,nu}(i,2);
                    B{p}{3,nu}(i,2) = B{p}{3,nu}(i,2)-1;

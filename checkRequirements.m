@@ -18,10 +18,15 @@ bi = goalfnu{3,1}(i,1);
 Fnuibar = Qi*getPlayersVector(xbar,nu,n_nus)+Ci*getOpponentsVector(xbar,nu,n_nus)+bi;
 
 % Check if case (i)/(ii) is fulfilled
-flagi = false;
-flagii= false;
-logi = zeros(size(n_nus,1),1);
-logii = zeros(size(n_nus,1),1);
+flagi = true;
+flagii= true;
+if Fnuibar+FEAS_TOL < 0
+    flagi = false;
+end
+if Fnuibar-FEAS_TOL > 0
+    flagii = false;
+end
+
 for mu=1:size(n_nus,1)
     xmu = getPlayersVector(xbar, mu, n_nus);
     activeconstr = abs(Y{1,mu}*xmu-Y{2,mu})<FEAS_TOL;
@@ -46,26 +51,24 @@ for mu=1:size(n_nus,1)
     model.vtype = 'C';
     model.lb = zeros(size([gradcons,gradlbs,gradubs],2),1);
     params.OutputFlag = 0;
-    if Fnuibar>=0
+    
+    if flagi
         model.rhs = gradFnuibar;
         result = gurobi(model,params);
-        if strcmp(result.status,'OPTIMAL')
-            logi(mu,1)=1;
+        if ~strcmp(result.status,'OPTIMAL')
+            flagi = false;
         end
     end
-    if Fnuibar<=0
+    
+    if flagii
         model.rhs = -gradFnuibar;
         result = gurobi(model,params);
-        if strcmp(result.status,'OPTIMAL')
-            logii(mu,1)=1;
+        if ~strcmp(result.status,'OPTIMAL')
+            flagii = false;
         end
-    end   
-    clear model;
-end
-if all(logi==1)
-    flagi = true;
-end
-if all(logii==1)
-    flagii = true;
+    end
+    if ~flagi && ~flagii
+        break;
+    end
 end
 end

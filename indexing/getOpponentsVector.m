@@ -7,13 +7,18 @@ function [xminusnu] = getOpponentsVector(x, nu, n_nus)
 %   Output:
 %       xminusnu: ((n-n_nu) x 1) vector
 
-lower = 1;
-iter = 1;
-while iter<nu
-    lower = lower + n_nus(iter,1);
-    iter = iter + 1;
+xminusnu = zeros((sum(n_nus)-n_nus(nu)),1);
+
+k=1;
+l=1;
+for mu=1:size(n_nus,1)
+    for i=1:n_nus(mu) 
+        if ~(mu==nu)
+            xminusnu(k)=x(l);
+            k=k+1;
+        end
+        l=l+1;
+    end
 end
-upper = lower+n_nus(nu,1)-1;
-xminusnu = [x(1:lower-1,1);x(upper+1:end,1)];
 end
 

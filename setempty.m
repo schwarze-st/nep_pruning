@@ -16,7 +16,7 @@ for nu=1:size(n_nus,1)
     model.vtype = 'C';
     params.OutputFlag = 0;
     result = gurobi(model,params);
-    if strcmp(result.status,'INFEASIBLE')
+    if (strcmp(result.status,'INFEASIBLE')||strcmp(result.status,'INF_OR_UNBD'))
         flag = true;
         break
     end

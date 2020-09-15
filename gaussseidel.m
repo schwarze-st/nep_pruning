@@ -34,16 +34,14 @@ while max(abs(xbar-xbarnew))>FEAS_TOL
         model.vtype = 'C';
         params.OutputFlag = 0;
         result = gurobi(model,params);
-        if (strcmp(result.status,'INFEASIBLE')|strcmp(result.status,'INF_OR_UNBD'))
+        if (strcmp(result.status,'INFEASIBLE')||strcmp(result.status,'INF_OR_UNBD'))
             flag_empty = true;
             xbar=xbarnew;
-            clear model
             break
         else
             assert(strcmp(result.status,'OPTIMAL'),'Error: Gauss-Seidl Iteration not Infeasible nor Optimal');
             xbarnew = setPlayersVector(xbarnew,result.x,nu,n_nus);
         end
-        clear model
     end
     iter = iter+1;
 end

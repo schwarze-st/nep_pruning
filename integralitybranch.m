@@ -11,7 +11,7 @@ function B_int = integralitybranch(B,xbar,n_nus)
 %   Output
 %       B_int (1x1) or (1x2) cell-array containing nonempty strategy subsets       
 
-B_int = cell(1,0);
+B_int = cell(1,2);
 
 logic = find(abs(xbar-round(xbar))>10^(-5));
 ind = logic(1);
@@ -20,10 +20,10 @@ B_lower = B;
 B_upper = B;
 B_lower{3,p_ind}(p_i,2) = floor(xbar(ind));
 if ~setempty(B_lower,n_nus)
-    B_int = [B_int,{B_lower}];
+    B_int{1} = B_lower;
 end
 B_upper{3,p_ind}(p_i,1) = ceil(xbar(ind));
 if ~setempty(B_upper,n_nus)
-    B_int = [B_int,{B_upper}];
+    B_int{2} = B_upper;
 end
 
