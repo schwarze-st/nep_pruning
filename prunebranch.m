@@ -18,8 +18,10 @@ function [B] = prunebranch(Y, Goalfs, n_nus, xbar)
 %       of type Y.
 
 global FEAS_TOL
+e = 1000;
 N = size(n_nus,1);
-B = {Y};
+B = cell(1,e);
+B{1} = Y;
 
 assert(iscell(Y),'Y has wrong input type');
 assert(iscell(Goalfs),'Goalfs has wrong input type');
@@ -34,64 +36,82 @@ for nu=1:N
        else
            [flagi,flagii] = checkRequirements(Goalfs(:,nu),Y,n_nus,xbar,nu,i);
            if flagi
-               C = cell(1,0);
-               for p=1:size(B,2)
-                   B{p}{1,N+1}(nu,i)=1;
-                   B_plus = B{p};
+               P = find(~cellfun('isempty',B));
+               for p=1:size(P,2)
+                   B0 = B{P(p)};
+                   B{P(p)} = zeros(0,0);
+                   B0{1,N+1}(nu,i)=1;
+                   B_plus = B0;
                    B_plus{3,nu}(i,2) = B_plus{3,nu}(i,1);
-                   B{p}{3,nu}(i,1) = B{p}{3,nu}(i,1)+1;
-                   C = [C,{B_plus}];
-                   A = B{p}{1,nu};
-                   b = B{p}{2,nu};
+                   B0{3,nu}(i,1) = B0{3,nu}(i,1)+1;
+                   B = addCells(B,{B_plus},e);
+                   A = B0{1,nu};
+                   b = B0{2,nu};
                    [J,lbactive,~] = getJ(B_plus,A,b,xbar,nu,i,n_nus,'-');
                    for j=1:size(J,1)
                        alpha = -A(J(j),:);
                        rhs = floor(-(b(J(j))+A(J(j),i)));
-                       B_plus = B{p};
+                       B_plus = B0;
                        B_plus{1,nu} = [A;alpha];
                        B_plus{2,nu} = [b;rhs];
-                       B{p}{1,nu} = [A;-alpha];
-                       B{p}{2,nu} = [b;-(rhs+1)];
-                       A = B{p}{1,nu};
-                       b = B{p}{2,nu};
-                       if and(~lbactive,and(j==1,p==1))
-                           C = [{B_plus},C];
+                       B0{1,nu} = [A;-alpha];
+                       B0{2,nu} = [b;-(rhs+1)];
+                       A = B0{1,nu};
+                       b = B0{2,nu};
+                       if p==1 && j==1 && ~lbactive 
+                           B_plus1 = B{1};
+                           B{1} = zeros(0,0);
+                           if ~setempty(B_plus1,n_nus)
+                               B = addCells(B,{B_plus,B_plus1},e);
+                           else
+                               B = addCells(B,{B_plus},e);
+                           end
                        else
-                           C = [C,{B_plus}];
+                           if ~setempty(B_plus,n_nus)
+                               B = addCells(B,{B_plus},e);
+                           end
                        end
                    end
                end
-               B=C;
            end
            if flagii
-               C = cell(1,0);
-               for p=1:size(B,2)
-                   B{p}{2,N+1}(nu,i)=1;
-                   B_plus = B{p};
+               P = find(~cellfun('isempty',B));
+               for p=1:size(P,2)
+                   B0 = B{P(p)};
+                   B{P(p)} = zeros(0,0);
+                   B0{2,N+1}(nu,i)=1;
+                   B_plus = B0;
                    B_plus{3,nu}(i,1) = B_plus{3,nu}(i,2);
-                   B{p}{3,nu}(i,2) = B{p}{3,nu}(i,2)-1;
-                   C = [C,{B_plus}];
-                   A = B{p}{1,nu};
-                   b = B{p}{2,nu};
+                   B0{3,nu}(i,2) = B0{3,nu}(i,2)-1;
+                   B = addCells(B,{B_plus},e);
+                   A = B0{1,nu};
+                   b = B0{2,nu};
                    [J,~,ubactive] = getJ(B_plus,A,b,xbar,nu,i,n_nus,'+');
                    for j=1:size(J,1)
                        alpha = -A(J(j),:);
                        rhs = floor(-(b(J(j))+A(J(j),i)));
-                       B_plus = B{p};
+                       B_plus = B0;
                        B_plus{1,nu} = [A;alpha];
                        B_plus{2,nu} = [b;rhs];
-                       B{p}{1,nu} = [A;-alpha];
-                       B{p}{2,nu} = [b;-(rhs+1)];
-                       A = B{p}{1,nu};
-                       b = B{p}{2,nu};
-                       if and(~ubactive,and(j==1,p==1))
-                           C = [{B_plus},C];
+                       B0{1,nu} = [A;-alpha];
+                       B0{2,nu} = [b;-(rhs+1)];
+                       A = B0{1,nu};
+                       b = B0{2,nu};
+                       if p==1 && j==1 && ~ubactive
+                           B_plus1 = B{1};
+                           B{1} = zeros(0,0);
+                           if ~setempty(B_plus1)
+                               B = addCells(B,{B_plus,B_plus1},e);
+                           else
+                               B = addCells(B,{B_plus},e);
+                           end
                        else
-                           C = [C,{B_plus}];
+                           if ~setempty(B_plus,n_nus)
+                                B = addCells(B,{B_plus},e);
+                           end
                        end
                    end
                end
-               B=C;
            end
        end
     end
