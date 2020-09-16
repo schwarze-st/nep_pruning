@@ -31,7 +31,7 @@ Omega = [Omega,tmp];
 L = cell(1,10000);
 L{1} = Omega;
 intNE = zeros(n,0);
-klk = zeros(n,0);
+klk = 0;
 
 while ~all(cellfun('isempty',L))
    ind = find(~cellfun('isempty',L),1);
@@ -41,7 +41,7 @@ while ~all(cellfun('isempty',L))
    if ~yempty
        B = prunebranch(Y, Goalfs, n_nus, xbar);
        if max(abs(round(xbar)-xbar))<FEAS_TOL
-          klk = [klk,xbar];
+          klk = klk+1;
           if isdiscreteNE(xbar,Omega,Goalfs,N,n_nus)
               disp('Found discrete NE');
               intNE = [intNE,xbar];  %#ok<AGROW>
@@ -60,7 +60,6 @@ while ~all(cellfun('isempty',L))
        L = addCells(L,B);
    end
 end
-size(klk,2)
-assert(size(unique(transpose(klk),'rows'),1)==size(klk,2),'Integer Point processed two times');
+klk
 end
 
