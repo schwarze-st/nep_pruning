@@ -14,9 +14,11 @@ function [intNE] = branchingmethod(Omega,Goalfs)
 %    Output: intNE: (n x p)-matrix containing Nash equilibrium points in
 %                   columns
 
-global OPT_TOL FEAS_TOL;
+global OPT_TOL FEAS_TOL; 
+global EQ O T N_I G_CALLS G_TIME N_ITER;
 OPT_TOL = 10^(-5);
 FEAS_TOL = 10^(-5);
+t0 = tic;
 
 n = size(Goalfs{1,1},1)+size(Goalfs{1,1},2);
 N = size(Goalfs,2);
@@ -31,9 +33,12 @@ Omega = [Omega,tmp];
 L = cell(1,10000);
 L{1} = Omega;
 intNE = zeros(n,0);
-klk = 0;
 
 while ~all(cellfun('isempty',L))
+   if toc(t0)>3600
+       break
+   end
+   N_ITER(N_I) = N_ITER(N_I)+1;
    ind = find(~cellfun('isempty',L),1);
    Y = L{ind};
    L{ind}= zeros(0,0);
@@ -41,10 +46,21 @@ while ~all(cellfun('isempty',L))
    if ~yempty
        B = prunebranch(Y, Goalfs, n_nus, xbar);
        if max(abs(round(xbar)-xbar))<FEAS_TOL
-          klk = klk+1;
-          if isdiscreteNE(xbar,Omega,Goalfs,N,n_nus)
+          G_CALLS(N_I,2) = G_CALLS(N_I,2)+1;
+          t_NE = tic;
+          isNE = isdiscreteNE(xbar,Omega,Goalfs,N,n_nus);
+          G_TIME(N_I,2) = G_TIME(N_I,2)+toc(t_NE);
+          if isNE
               disp('Found discrete NE');
               intNE = [intNE,xbar];  %#ok<AGROW>
+              if O(N_I,1)==0
+                  O(N_I,1) = G_CALLS(N_I,2);
+                  T(N_I,1) = toc(t0);
+              else
+                  O(N_I,2) = G_CALLS(N_I,2);
+                  T(N_I,2) = toc(t0);
+              end
+              
           end
           % Excluding xbar from feasible set
           B_list = removexbarbranch(B{1},xbar,n_nus);
@@ -61,6 +77,8 @@ while ~all(cellfun('isempty',L))
        L = addCells(L,B);
    end
 end
-klk
+O(N_I,3) = G_CALLS(N_I,2);
+T(N_I,3) = toc(t0);
+EQ(N_I) = size(intNE,2);
 end
 

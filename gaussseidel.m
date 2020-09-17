@@ -9,7 +9,7 @@ function [xbar,flag_empty] = gaussseidel(Y,Goalfs,n_nus)
 %           converged)
 %       flag-empty: logical: returns true, if Y is an empty set
 
-global FEAS_TOL
+global N_I G_CALLS G_TIME;
 
 xbar = ones(sum(n_nus),1);
 xbarnew = zeros(sum(n_nus),1);
@@ -37,7 +37,10 @@ while max(abs(xbar-xbarnew))>10^(-2)
         end
         params.OutputFlag = 0;
         %params.BarConvTol = 10^(-8);
+        t_s = tic;
         result = gurobi(model,params);
+        G_CALLS(N_I,1) = G_CALLS(N_I,1)+1;
+        G_TIME(N_I,1) = G_TIME(N_I,1) + toc(t_s); 
         if (strcmp(result.status,'INFEASIBLE')||strcmp(result.status,'INF_OR_UNBD'))
             flag_empty = true;
             xbar=xbarnew;

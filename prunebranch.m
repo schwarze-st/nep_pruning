@@ -18,6 +18,7 @@ function [B] = prunebranch(Y, Goalfs, n_nus, xbar)
 %       of type Y.
 
 global FEAS_TOL
+global N_I G_TIME G_CALLS;
 e = 1000;
 N = size(n_nus,1);
 B = cell(1,e);
@@ -34,7 +35,10 @@ for nu=1:N
        if (((Y{3,nu}(i,2)-Y{3,nu}(i,1))<FEAS_TOL)||(Y{1,N+1}(nu,i)==1 || Y{2,N+1}(nu,i)==1))
            % If (nu,i) is already fixed on a value -> Do nothing
        else
+           t_r = tic;
            [flagi,flagii] = checkRequirements(Goalfs(:,nu),Y,n_nus,xbar,nu,i);
+           G_CALLS(N_I,3) = G_CALLS(N_I,3)+1;
+           G_TIME(N_I,3) = G_TIME(N_I,3)+toc(t_r);
            if flagi
                P = find(~cellfun('isempty',B));
                for p=1:size(P,2)
@@ -61,13 +65,21 @@ for nu=1:N
                        if p==1 && j==1 && ~lbactive 
                            B_plus1 = B{1};
                            B{1} = zeros(0,0);
-                           if ~setempty(B_plus1,n_nus)
+                           t_se = tic;
+                           se = setempty(B_plus1,n_nus);
+                           G_CALLS(N_I,4) = G_CALLS(N_I,4)+1;
+                           G_TIME(N_I,4) = G_TIME(N_I,4)+toc(t_se);
+                           if ~se
                                B = addCells(B,{B_plus,B_plus1},e);
                            else
                                B = addCells(B,{B_plus},e);
                            end
                        else
-                           if ~setempty(B_plus,n_nus)
+                           t_se = tic;
+                           se = setempty(B_plus,n_nus);
+                           G_CALLS(N_I,4) = G_CALLS(N_I,4)+1;
+                           G_TIME(N_I,4) = G_TIME(N_I,4)+toc(t_se);
+                           if ~se
                                B = addCells(B,{B_plus},e);
                            end
                        end
@@ -100,13 +112,21 @@ for nu=1:N
                        if p==1 && j==1 && ~ubactive
                            B_plus1 = B{1};
                            B{1} = zeros(0,0);
-                           if ~setempty(B_plus1)
+                           t_se = tic;
+                           se = setempty(B_plus1);
+                           G_CALLS(N_I,4) = G_CALLS(N_I,4)+1;
+                           G_TIME(N_I,4) = G_TIME(N_I,4)+toc(t_se);
+                           if ~se
                                B = addCells(B,{B_plus,B_plus1},e);
                            else
                                B = addCells(B,{B_plus},e);
                            end
                        else
-                           if ~setempty(B_plus,n_nus)
+                           t_se = tic;
+                           se = setempty(B_plus,n_nus);
+                           G_CALLS(N_I,4) = G_CALLS(N_I,4)+1;
+                           G_TIME(N_I,4) = G_TIME(N_I,4)+toc(t_se);
+                           if ~se
                                 B = addCells(B,{B_plus},e);
                            end
                        end
