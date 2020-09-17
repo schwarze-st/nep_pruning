@@ -48,7 +48,8 @@ while ~all(cellfun('isempty',L))
           end
           % Excluding xbar from feasible set
           B_list = removexbarbranch(B{1},xbar,n_nus);
-          B = [B_list,B(2:end)];
+          B{1} = zeros(0,0);
+          B = addCells(B,B_list,1000);
        else
            % if not branched out by pruningprocedure: Branching step towards integer solution
            if pointfeasible(B{1},xbar,n_nus)

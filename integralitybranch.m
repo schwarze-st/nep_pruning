@@ -18,11 +18,8 @@ ind = find(abs(xbar-round(xbar))>10^(-5),1);
 B_lower = B;
 B_upper = B;
 B_lower{3,p_ind}(p_i,2) = floor(xbar(ind));
-if ~setempty(B_lower,n_nus)
-    B_int{1} = B_lower;
-end
+B_int{1} = B_lower;
 B_upper{3,p_ind}(p_i,1) = ceil(xbar(ind));
-if ~setempty(B_upper,n_nus)
-    B_int{2} = B_upper;
+B_int{2} = B_upper;
 end
 
