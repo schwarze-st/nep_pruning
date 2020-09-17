@@ -13,8 +13,7 @@ function B_int = integralitybranch(B,xbar,n_nus)
 
 B_int = cell(1,2);
 
-logic = find(abs(xbar-round(xbar))>10^(-5));
-ind = logic(1);
+ind = find(abs(xbar-round(xbar))>10^(-5),1);
 [p_ind,p_i] = getPlayersIndex(ind,n_nus);
 B_lower = B;
 B_upper = B;

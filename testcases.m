@@ -47,16 +47,17 @@ assert(~isdiscreteNE([0;0],Omega,Gf,2,[1;1]),'Error in isdiscreteNE');
 assert(~isdiscreteNE([-1;1],Omega,Gf,2,[1;1]),'Error in isdiscreteNE');
 
 % Test getRandomNEP
-% N = 2;
-% n_nus = [2,2]';
-% m_nus = [4,4]';
-% lb = -5;
-% ub = 5;
+clear all
+N = 2;
+n_nus = [5,5]';
+m_nus = [10,10]';
+lb = -5;
+ub = 5;
 % clear all
 % load('rg22.mat')
-%[Omega,Gf] = getRandomNEP(N,lb,ub,n_nus,m_nus);
+[Omega,Gf] = getRandomNEP(N,lb,ub,n_nus,m_nus);
 % clear all
-% load('rg32_1');
+save('IntegerPrograms/rg25_2');
 % branchingmethod(Omega,Gf)
 
 
