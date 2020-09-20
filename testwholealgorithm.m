@@ -11,8 +11,8 @@ N_ITER = zeros(n_inst,1);
 G_CALLS = zeros(n_inst,4);
 G_TIME = zeros(n_inst,4);
 
-for i=1:2
-    N_I=i;
+for i=1:n_inst
+    N_I=i
     load(append('IntegerPrograms/',Names{i}));
     branchingmethod(Omega,Gf);
 end
