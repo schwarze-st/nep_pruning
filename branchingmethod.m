@@ -10,7 +10,7 @@ function [intNE] = branchingmethod(Omega,Goalfs)
 %                Q (n_nu x n_nu)-matrix,
 %                b (n_nu x 1)-vector.
 %                    in each column. Describes the nu-th players goalfunction
-%                    1/2* x_nu'*C*x_nu + (C*x_-nu + b)'x_nu
+%                    1/2* x_nu'*Q*x_nu + (C*x_-nu + b)'x_nu
 %    Output: intNE: (n x p)-matrix containing Nash equilibrium points in
 %                   columns
 
