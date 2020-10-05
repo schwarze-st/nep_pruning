@@ -25,10 +25,22 @@ for nu=1:N
     Omega{1,nu}=A;
     Omega{2,nu}=b;
     Omega{3,nu}=[ones(n,1)*lb,ones(n,1)*ub];
-    Q = rand(n);
+    Q = 2*(rand(n)-0.5);
+    C = rand(n,sum(n_nus)-n)-0.5;
+    b = rand(n,1)-0.5;
+    for i=1:n
+        if rand(1)>0.5
+            b(i)=0;
+        end
+        for j=1:sum(n_nus)-n
+            if rand(1)>0.5
+                C(i,j)=0;
+            end
+        end
+    end
     Gf{2,nu}= Q*transpose(Q);
-    Gf{1,nu}= rand(n,sum(n_nus)-n);
-    Gf{3,nu}= rand(n,1);
+    Gf{1,nu}= C;
+    Gf{3,nu}= b;
 end
 end
 
