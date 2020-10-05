@@ -113,7 +113,7 @@ for nu=1:N
                            B_plus1 = B{1};
                            B{1} = zeros(0,0);
                            t_se = tic;
-                           se = setempty(B_plus1);
+                           se = setempty(B_plus1,n_nus);
                            G_CALLS(N_I,4) = G_CALLS(N_I,4)+1;
                            G_TIME(N_I,4) = G_TIME(N_I,4)+toc(t_se);
                            if ~se

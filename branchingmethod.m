@@ -35,7 +35,7 @@ L{1} = Omega;
 intNE = zeros(n,0);
 
 while ~all(cellfun('isempty',L))
-   if toc(t0)>3600
+   if toc(t0)>10800
        break
    end
    N_ITER(N_I) = N_ITER(N_I)+1;
