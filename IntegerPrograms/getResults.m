@@ -12,7 +12,10 @@ for i=1:size(Names,2)
     end
 end
 all_results = [EQ,T,O];
-G_TIME = [G_TIME,sum(G_TIME,2)];
+sum = sum(G_TIME,2);
+G_TIME = G_TIME./sum;
+G_TIME = [G_TIME,sum];
+
 % for i=1:size(Names,2)
 %     G_TIME(i,1:end-1) = G_TIME(i,1:end-1)./G_TIME(i,end) * 100;
 % end
