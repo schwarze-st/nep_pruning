@@ -1,4 +1,4 @@
-load('results1.mat')
+load('resultsB1.mat')
 
 Nam = {};
 %pdata = zeros(size(Names,2),5);
