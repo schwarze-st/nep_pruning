@@ -32,15 +32,15 @@ for i=1:n_inst
     B_size(i) = (2*ub+1)^(n_nus(1))^(N);
 end
 
-all_data = [lammin, lammax, lbs, ubs, ms, B_size];
+all_data = [lammin, lbs, ubs, ms, B_size];
 
 input = struct();
 input.data = all_data;
 input.tableRowLabels = Nam;
-input.tableColLabels = {'$\lambda_{\min}$','$\lambda_{\max}$','lb','ub','m','Boxsize'};
+input.tableColLabels = {'$\lambda_{\min}$','lb','ub','m','Boxsize'};
 input.tableCaption = 'Properties of random instances.';
 input.tableLabel = 'Pprop';
-input.dataFormat = {'%.4f',2,'%.0f',4};
+input.dataFormat = {'%.4f',1,'%.0f',4};
 input.tableBorders = 0;
 input.booktabs = 0;
 
