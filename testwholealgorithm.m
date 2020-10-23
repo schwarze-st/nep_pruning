@@ -13,11 +13,11 @@
 
 global N_I
 
-for i=16:24
+for i=25:n_inst
     N_I=i;
     name = append('IntegerPrograms/TestSet1/',Names{i})
     load(name);
     branchingmethod(Omega,Gf);
 end
 
-save('resultsB2')
+save('resultsB3')
