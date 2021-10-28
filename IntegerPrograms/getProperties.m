@@ -1,3 +1,5 @@
+%% get Properties of a testbed
+
 S = dir('IntegerPrograms/TestSet1/*.mat');
 Names = {S.name};
 Nam = {};
@@ -9,6 +11,9 @@ lbs = zeros(n_inst,1);
 ubs = zeros(n_inst,1);
 ms = zeros(n_inst,1);
 B_size = zeros(n_inst,1);
+b_size = zeros(n_inst,1);
+fp = zeros(n_inst,1);
+
 
 
 
@@ -29,15 +34,35 @@ for i=1:n_inst
     lbs(i)=lb;
     ubs(i)=ub;
     ms(i) = m_nus(1);
+    
+        name = append('IntegerPrograms/TestSet1/',Names{i}); 
+    load(name);
+    
+    % handle variable number of arguments with transformation from
+    % cell-array into comma-separated list
+    assert(all(n_nus == ones(size(n_nus))*mean(n_nus)),'Can not calculate number of feasible points with this method, all players must have the same number of variables');
+    cellM = cell([1,n_nus(1,1)]); % all players have the same number of variables
+    for j=1:n_nus(1,1)
+        cellM{1,j}=[lb:ub];
+    end
+    % combinations gets N arguments
+    f_vec = combinations(cellM{1,:});
+    % calculate number of feasible points
+    fp(i,1) = getFeasiblePoints(Omega,f_vec,m_nus);
+    [p,~] = size(f_vec);
+    b_size(i,1) = p^N; 
     B_size(i) = (2*ub+1)^(n_nus(1))^(N);
 end
 
-all_data = [lammin, lbs, ubs, ms, B_size];
+all_data = [lammin, lbs, ubs, ms, fp];
+
+%% generate LaTeX table
+all_data = [lammin, lbs, ubs, ms, fp];
 
 input = struct();
 input.data = all_data;
 input.tableRowLabels = Nam;
-input.tableColLabels = {'$\lambda_{\min}$','lb','ub','m','Boxsize'};
+input.tableColLabels = {'$\lambda_{\min}$','lb','ub','m','Size'};
 input.tableCaption = 'Properties of random instances.';
 input.tableLabel = 'Pprop';
 input.dataFormat = {'%.4f',1,'%.0f',4};
