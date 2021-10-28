@@ -24,10 +24,11 @@ else
              B_new2{3,nu}(i,2) = round(xbar(ind))-1;
              assert(~pointfeasible(B_new1,xbar,n_nus),'Error in removexbarbranch: not branched out!');
              assert(~pointfeasible(B_new2,xbar,n_nus),'Error in removexbarbranch: not branched out!');
-             if (B_new1{3,nu}(i,1)<=B_new1{3,nu}(i,2)-FEAS_TOL) 
+             % Do not add to list if lb > ub
+             if (B_new1{3,nu}(i,1)<=B_new1{3,nu}(i,2)+FEAS_TOL) % if lb == ub, we do want to keep it
                  B_list{k}   = B_new1;
              end
-             if (B_new2{3,nu}(i,1)<=B_new2{3,nu}(i,2)-FEAS_TOL) 
+             if (B_new2{3,nu}(i,1)<=B_new2{3,nu}(i,2)+FEAS_TOL) 
                  B_list{k+1} = B_new2;
              end
              B{3,nu}(i,1) = round(xbar(ind));
