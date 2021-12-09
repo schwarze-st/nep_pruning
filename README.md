@@ -1,0 +1,1 @@
+Numeric tests for "A branch-and-prune algorithm for discrete player convex Nash equilibrium problems"
