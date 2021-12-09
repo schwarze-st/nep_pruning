@@ -17,4 +17,5 @@ The data printed in the thesis are contained in:
 Important:
 
 - resultsB3 also contains all data from resultsB1&B2
+- The tables in resultsB3 are in a different order than the tables in the thesis
 - run getResults.m to generate the latex tables
