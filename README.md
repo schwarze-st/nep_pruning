@@ -6,6 +6,9 @@
 
 ## The Test-Sets
 The tests are performed on the instances in the folder TestSet1, the table with the problem properties can be reproduced by running getProperties.m.
+TestSet1: On these testsets, my master's thesis results were computet
+TestSet3: New method for generating test-instances (different signs and zeros in goalfunctions)
+TestSet5: Non-convex Objective functions (Q not positive definite, but diagonal entries are positive)
 
 ## Data in /results 
 The data printed in the thesis are contained in:

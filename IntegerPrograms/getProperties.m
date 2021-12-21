@@ -1,10 +1,11 @@
 %% get Properties of a testbed
+folder = 'TestSet5';
 
-S = dir('IntegerPrograms/TestSet1/*.mat');
+S = dir('IntegerPrograms/TestSet3/*t');
 Names = {S.name};
 Nam = {};
 
-n_inst = 30;
+n_inst = size(S,1);
 lammin = zeros(n_inst,1);
 lammax = zeros(n_inst,1);
 lbs = zeros(n_inst,1);
@@ -19,13 +20,13 @@ fp = zeros(n_inst,1);
 
 for i=1:n_inst
     Nam{i} = append('$R',Names{i}(3:end-4),'$');
-    load(append('IntegerPrograms/TestSet1/',Names{i}));
+    load(append('IntegerPrograms/TestSet3/',Names{i}));
+    disp(Names{i});
     for j=1:size(Gf,2)
-        Q = Gf{2,j};
-        E = eig(Q);
+        E = eig(Gf{2,j});
         if j == 1
-            lammin(i)=min(E);
-            lammax(i)=max(E);
+            lammin(i) = min(E);
+            lammax(i) = max(E);
         else
             lammin(i) = min([lammin(i);min(E)]);
             lammax(i) = max([lammax(i);max(E)]);
@@ -34,8 +35,7 @@ for i=1:n_inst
     lbs(i)=lb;
     ubs(i)=ub;
     ms(i) = m_nus(1);
-    
-        name = append('IntegerPrograms/TestSet1/',Names{i}); 
+    name = append('IntegerPrograms/TestSet3/',Names{i}); 
     load(name);
     
     % handle variable number of arguments with transformation from

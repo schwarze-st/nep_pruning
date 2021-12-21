@@ -1,6 +1,6 @@
 function [Omega,Gf] = getRandomNEP(N, lb, ub, n_nus, m_nus)
-%UNTITLED Summary of this function goes here
-%   Detailed explanation goes here
+% Generates Objective functions and polyhedral feasible sets for an N
+% player Nash equilibrium problem 
 Omega = cell([3,N]);
 Gf = cell([3,N]);
 for nu=1:N
@@ -9,8 +9,7 @@ for nu=1:N
     A = zeros(m,n);
     b = zeros(m,1);
     nonz_count = randi([2 n_nus(nu)],m_nus(nu),1);
-    u = ub*0.5;
-    
+    u = ub*0.5; 
     for k=1:m
         nonz_ind = randperm(n,nonz_count(k));
         nonz_val = max(2,round(1.5*randn(nonz_count(k),1))+5);
@@ -25,10 +24,23 @@ for nu=1:N
     Omega{1,nu}=A;
     Omega{2,nu}=b;
     Omega{3,nu}=[ones(n,1)*lb,ones(n,1)*ub];
-    Q = rand(n);
-    Gf{2,nu}= Q*transpose(Q);
-    Gf{1,nu}= rand(n,sum(n_nus)-n);
-    Gf{3,nu}= rand(n,1);
+    Q = 2*(rand(n)-0.5);
+    C = 2*(rand(n,sum(n_nus)-n)-0.5);
+    b = 2*(rand(n,1)-0.5);
+    for i=1:n
+        Q(i,i) = abs(Q(i,i));
+        if rand(1)>0.5
+            b(i)=0;
+        end
+        for j=1:sum(n_nus)-n
+            if rand(1)>0.5
+                C(i,j)=0;
+            end
+        end
+    end
+    Gf{1,nu}= C;
+    Gf{2,nu}= 0.5*Q+0.5*Q';
+    Gf{3,nu}= b;
 end
 end
 
