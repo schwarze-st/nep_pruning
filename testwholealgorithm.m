@@ -11,8 +11,7 @@ N_ITER = zeros(n_inst,1);
 G_CALLS = zeros(n_inst,4);
 G_TIME = zeros(n_inst,4);
 
-%for i=1:n_inst
-for i=1:6
+for i=1:n_inst
     N_I=i;
     disp(i); 
     name = append('IntegerPrograms/TestSet5/',Names{i});
