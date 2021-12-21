@@ -1,8 +1,8 @@
-function [xbar,flag_empty] = gaussseidel(Y,Goalfs,n_nus)
+function [xbar,flag_empty] = gaussseidel(Y,Obj,n_nus,conv)
 % Gauss-Seidel Procedure to calculate continuous Nash-equilibrium for (NEP) 
 %   Input:
 %       Y (3xN) cell-array: Strategy subset 
-%       Goalfs: (3 x N) cell-array: Goalfunctions
+%       Obj: (3 x N) cell-array: Objective functions
 %       n_nus: (Nx1)-vector
 %    Output: 
 %       xbar: continuous Nash-equilibrium of the game (if it
@@ -24,8 +24,8 @@ while max(abs(xbar-xbarnew))>10^(-2)
     end
     for nu=1:size(n_nus,1)
         xminusnu = getOpponentsVector(xbarnew, nu, n_nus);
-        model.Q = sparse(0.5*Goalfs{2,nu});
-        model.obj = Goalfs{1,nu}*xminusnu+Goalfs{3,nu};
+        model.Q = sparse(0.5*Obj{2,nu});
+        model.obj = Obj{1,nu}*xminusnu+Obj{3,nu};
         model.A = sparse(Y{1,nu});
         model.rhs = Y{2,nu};
         model.sense = '<';
@@ -36,6 +36,9 @@ while max(abs(xbar-xbarnew))>10^(-2)
             model.pstart = getPlayersVector(xbar,nu,n_nus);
         end
         params.OutputFlag = 0;
+        if conv(nu)==0
+            params.NonConvex = 2; % Achtung, hier wird eingestellt, dass die Zf nichtkonvex ist
+        end
         %params.BarConvTol = 10^(-8);
         t_s = tic;
         result = gurobi(model,params);

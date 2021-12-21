@@ -1,23 +1,26 @@
-%global EQ O T N_ITER P_REQ G_CALLS G_TIME N_I;
+global EQ O T N_ITER P_REQ G_CALLS G_TIME N_I;
 
 % read instances
-% S = dir('IntegerPrograms/TestSet1/*.mat');
-% Names = {S.name};
-% n_inst = size(Names,2);
-% EQ = zeros(n_inst,1);
-% O = zeros(n_inst,3);
-% T = zeros(n_inst,3);
-% N_ITER = zeros(n_inst,1);
-% G_CALLS = zeros(n_inst,4);
-% G_TIME = zeros(n_inst,4);
+S = dir('IntegerPrograms/TestSet5/*.mat');
+Names = {S.name};
+n_inst = size(Names,2);
+EQ = zeros(n_inst,1);
+O = zeros(n_inst,3);
+T = zeros(n_inst,3);
+N_ITER = zeros(n_inst,1);
+G_CALLS = zeros(n_inst,4);
+G_TIME = zeros(n_inst,4);
 
-global N_I
-
-for i=25:n_inst
+%for i=1:n_inst
+for i=1:6
     N_I=i;
-    name = append('IntegerPrograms/TestSet1/',Names{i})
+    disp(i); 
+    name = append('IntegerPrograms/TestSet5/',Names{i});
     load(name);
-    branchingmethod(Omega,Gf);
+    conv = zeros(N,1);
+    for j=1:N
+        E = eig(Gf{j,2});
+        conv(j,1) = (min(E)>=0);
+    end
+    branchingmethod(Omega,Gf,conv);
 end
-
-save('resultsB3')

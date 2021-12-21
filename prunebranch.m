@@ -1,15 +1,15 @@
-function [B] = prunebranch(Y, Goalfs, n_nus, xbar)
+function [B] = prunebranch(Y, Obj, n_nus, xbar)
 %Returns a list of disjunct sets containing all Nash equilibria of the game
 %   Input:
 %       Y: (3xN)-cell array
 %           B(1,nu): A^nu (m_nu x n_nu) Matrix
 %           B(2,nu): b^nu (m_nu x 1) Vector
 %           B(3,nu): bnd^nu (n_nu x 2) Matrix
-%       Goalfs: (3 x N)-cell array containing N cells with:
+%       Obj: (3 x N)-cell array containing N cells with:
 %           C (n_nu x n-n_nu)-matrix,
 %           Q (n_nu x n_nu)-matrix,
 %           b (n_nu x 1)-vector.
-%               describe the nu-th players goalfunction
+%               describe the nu-th players objective function
 %               1/2* x_nu'*C*x_nu + (C*x_-nu + b)'x_nu
 %       xbar (n x 1) Vector
 %       n_nus (N x 1) Vector
@@ -25,8 +25,8 @@ B = cell(1,e);
 B{1} = Y;
 
 assert(iscell(Y),'Y has wrong input type');
-assert(iscell(Goalfs),'Goalfs has wrong input type');
-assert(all(size(Goalfs)==[3,N]),'Goalfs has wrong size');
+assert(iscell(Obj),'Goalfs has wrong input type');
+assert(all(size(Obj)==[3,N]),'Goalfs has wrong size');
 assert(all(size(Y)==[3,N+1]),'Y has wrong size');
 
 
@@ -36,7 +36,7 @@ for nu=1:N
            % If (nu,i) is already fixed on a value -> Do nothing
        else
            t_r = tic;
-           [flagi,flagii] = checkRequirements(Goalfs(:,nu),Y,n_nus,xbar,nu,i);
+           [flagi,flagii] = checkRequirements(Obj(:,nu),Y,n_nus,xbar,nu,i);
            G_CALLS(N_I,3) = G_CALLS(N_I,3)+1;
            G_TIME(N_I,3) = G_TIME(N_I,3)+toc(t_r);
            if flagi
