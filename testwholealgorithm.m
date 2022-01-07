@@ -11,6 +11,7 @@ N_ITER = zeros(n_inst,1);
 G_CALLS = zeros(n_inst,4);
 G_TIME = zeros(n_inst,4);
 
+
 for i=1:n_inst
     N_I=i;
     disp(i); 
@@ -18,8 +19,10 @@ for i=1:n_inst
     load(name);
     conv = zeros(N,1);
     for j=1:N
-        E = eig(Gf{j,2});
+        E = eig(Gf{2,j});
         conv(j,1) = (min(E)>=0);
     end
     branchingmethod(Omega,Gf,conv);
 end
+
+save('resultsNC');
