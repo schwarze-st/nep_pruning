@@ -10,12 +10,13 @@ TestSet1: On these testsets, my master's thesis results were computet
 TestSet3: New method for generating test-instances (different signs and zeros in goalfunctions)
 TestSet5: Non-convex Objective functions (Q not positive definite, but diagonal entries are positive)
 
-## Data in /results 
+## Data in /results
 The data printed in the thesis are contained in:
 
 - resultsB1 : Instances 1-15  from TestSet1
 - resultsB2 : Instances 16-24 from TestSet1
 - resultsB3 : Instances 25-30 from TestSet1
+- resultsNC : Non-convex instances from TestSet5
 
 Important:
 
