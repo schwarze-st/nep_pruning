@@ -44,8 +44,7 @@ for nu=1:N
     if convex ==0
         Gf{2,nu}= 0.5*Q+0.5*Q';
     else
-        Gf{2,nu}= transpose(Q)*Q;
-    end
+        Gf{2,nu}= Q'Q;
     Gf{3,nu}= b;
 end
 end
