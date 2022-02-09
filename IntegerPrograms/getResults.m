@@ -1,4 +1,4 @@
-load('resultsB3.mat')
+load('resultsNC.mat')
 
 Nam = {};
 %pdata = zeros(size(Names,2),5);
@@ -11,10 +11,15 @@ for i=1:size(Names,2)
         O(i,2)=O(i,1);
     end
 end
-all_results = [EQ,T,O];
-sum = sum(G_TIME,2);
-G_TIME = G_TIME./sum;
-G_TIME = [G_TIME,sum];
+
+explored = O(:,3)./fp ;
+all_results = [EQ,T,O,explored]; % add/rm cols
+
+tsum = sum(G_TIME,2);
+G_TIME = G_TIME./tsum;
+G_TIME = [G_TIME,tsum];
+
+
 
 % for i=1:size(Names,2)
 %     G_TIME(i,1:end-1) = G_TIME(i,1:end-1)./G_TIME(i,end) * 100;
@@ -23,10 +28,10 @@ G_TIME = [G_TIME,sum];
 input = struct();
 input.data = all_results;
 input.tableRowLabels = Nam;
-input.tableColLabels = {'EQ','$t_1$','$t_2$','$t_3$','$O_1$','$O_2$','$O_3$'};
+input.tableColLabels = {'EQ','$t_1$','$t_2$','$t_3$','$O_1$','$O_2$','$O_3$','$O_3$/Size'}; % add/rm cols
 input.tableCaption = 'Nash equilibria.';
 input.tableLabel = 'Nasheq';
-input.dataFormat = {'%.0f',1,'%.2f',3,'%.0f',3};
+input.dataFormat = {'%.0f',1,'%.2f',3,'%.0f',3,'%.5f',1}; % add/rm cols
 input.tableBorders = 0;
 input.booktabs = 0;
 

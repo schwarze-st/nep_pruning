@@ -1,13 +1,15 @@
 %% get Properties of a testbed
 folder = 'TestSet5';
 
-S = dir('IntegerPrograms/TestSet3/*t');
+S = dir('IntegerPrograms/TestSet5/*t');
 Names = {S.name};
 Nam = {};
 
 n_inst = size(S,1);
 lammin = zeros(n_inst,1);
 lammax = zeros(n_inst,1);
+convexplayers = zeros(n_inst,1);
+nonconvexplayers = zeros(n_inst,1);
 lbs = zeros(n_inst,1);
 ubs = zeros(n_inst,1);
 ms = zeros(n_inst,1);
@@ -20,10 +22,15 @@ fp = zeros(n_inst,1);
 
 for i=1:n_inst
     Nam{i} = append('$R',Names{i}(3:end-4),'$');
-    load(append('IntegerPrograms/TestSet3/',Names{i}));
+    load(append('IntegerPrograms/TestSet5/',Names{i}));
     disp(Names{i});
     for j=1:size(Gf,2)
         E = eig(Gf{2,j});
+        if min(E)<0
+            nonconvexplayers(i) = nonconvexplayers(i) + 1;
+        else
+            convexplayers(i) = convexplayers(i) + 1;
+        end
         if j == 1
             lammin(i) = min(E);
             lammax(i) = max(E);
@@ -35,7 +42,7 @@ for i=1:n_inst
     lbs(i)=lb;
     ubs(i)=ub;
     ms(i) = m_nus(1);
-    name = append('IntegerPrograms/TestSet3/',Names{i}); 
+    name = append('IntegerPrograms/TestSet5/',Names{i}); 
     load(name);
     
     % handle variable number of arguments with transformation from
@@ -57,15 +64,15 @@ end
 all_data = [lammin, lbs, ubs, ms, fp];
 
 %% generate LaTeX table
-all_data = [lammin, lbs, ubs, ms, fp];
+all_data = [lammin, nonconvexplayers, ms, fp]; % add/rm column
 
 input = struct();
 input.data = all_data;
 input.tableRowLabels = Nam;
-input.tableColLabels = {'$\lambda_{\min}$','lb','ub','m','Size'};
+input.tableColLabels = {'$\lambda_{\min}$','No. Nonconv','m','Size'}; % add/rm column
 input.tableCaption = 'Properties of random instances.';
 input.tableLabel = 'Pprop';
-input.dataFormat = {'%.4f',1,'%.0f',4};
+input.dataFormat = {'%.4f',1,'%.0f',3}; % add/rm column
 input.tableBorders = 0;
 input.booktabs = 0;
 
