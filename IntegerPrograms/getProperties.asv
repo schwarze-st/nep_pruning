@@ -72,7 +72,7 @@ input.tableRowLabels = Nam;
 input.tableColLabels = {'$\lambda_{\min}$','No. Nonconv','lb','ub','m','Size'}; % add/rm column
 input.tableCaption = 'Properties of random instances.';
 input.tableLabel = 'Pprop';
-input.dataFormat = {'%.4f',1,'%.0f',5}; % add/rm column
+input.dataFormat = {'%.4f',1,'%.0f',3}; % add/rm column
 input.tableBorders = 0;
 input.booktabs = 0;
 
