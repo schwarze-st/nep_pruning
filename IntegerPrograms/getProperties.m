@@ -1,7 +1,7 @@
 %% get Properties of a testbed
-folder = 'TestSet3';
+folder = 'TestSet5b2';
 
-S = dir('IntegerPrograms/TestSet3/*t');
+S = dir('IntegerPrograms/TestSet5b2/*t');
 Names = {S.name};
 Nam = {};
 
@@ -22,7 +22,7 @@ fp = zeros(n_inst,1);
 
 for i=1:n_inst
     Nam{i} = append('$R',Names{i}(3:end-4),'$');
-    load(append('IntegerPrograms/TestSet3/',Names{i}));
+    load(append('IntegerPrograms/TestSet5b2/',Names{i}));
     disp(Names{i});
     for j=1:size(Gf,2)
         E = eig(Gf{2,j});
@@ -42,7 +42,7 @@ for i=1:n_inst
     lbs(i)=lb;
     ubs(i)=ub;
     ms(i) = m_nus(1);
-    name = append('IntegerPrograms/TestSet3/',Names{i}); 
+    name = append('IntegerPrograms/TestSet5b2/',Names{i}); 
     load(name);
     
     % handle variable number of arguments with transformation from

@@ -1,7 +1,7 @@
 global EQ O T N_ITER P_REQ G_CALLS G_TIME N_I;
 
 % read instances
-S = dir('IntegerPrograms/TestSet5b/*.mat');
+S = dir('IntegerPrograms/TestSet3/*.mat');
 Names = {S.name};
 n_inst = size(Names,2);
 EQ = zeros(n_inst,1);
@@ -12,10 +12,10 @@ G_CALLS = zeros(n_inst,4);
 G_TIME = zeros(n_inst,4);
 
 
-for i=[1,2,7:9]
+for i=1:n_inst
     N_I=i;
     disp(i); 
-    name = append('IntegerPrograms/TestSet5b/',Names{i});
+    name = append('IntegerPrograms/TestSet3/',Names{i});
     load(name);
     conv = zeros(N,1);
     for j=1:N
@@ -25,4 +25,4 @@ for i=[1,2,7:9]
     branchingmethod(Omega,Gf,conv);
 end
 
-save('resultsNCb2');
+save('results/resultsC3');
