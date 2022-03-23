@@ -1,4 +1,6 @@
-%load('resultsNCb2.mat')
+% This file creates two latex-tables from the rsults file.
+% To run this script, you have to load the result-file for the test bed and
+% the Properties of the the test bed with 'getProperties.m'
 
 Nam = {};
 %pdata = zeros(size(Names,2),5);

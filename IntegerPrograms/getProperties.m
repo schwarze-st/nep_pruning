@@ -1,7 +1,9 @@
 %% get Properties of a testbed
-folder = 'TestSet3';
+% This script also calculates the cardinality of Omega (number of feasible
+% strategies/points) and saves it as 'fp'
+testbed = 'TestBedNonConvex';
 
-S = dir('IntegerPrograms/TestSet3/*t');
+S = dir(append('IntegerPrograms/',testbed,'/*t'));
 Names = {S.name};
 Nam = {};
 
@@ -22,7 +24,7 @@ fp = zeros(n_inst,1);
 
 for i=1:n_inst
     Nam{i} = append('$R',Names{i}(3:end-4),'$');
-    load(append('IntegerPrograms/TestSet3/',Names{i}));
+    load(append('IntegerPrograms/',testbed,'/',Names{i}));
     disp(Names{i});
     for j=1:size(Gf,2)
         E = eig(Gf{2,j});
@@ -42,7 +44,7 @@ for i=1:n_inst
     lbs(i)=lb;
     ubs(i)=ub;
     ms(i) = m_nus(1);
-    name = append('IntegerPrograms/TestSet3/',Names{i}); 
+    name = append('IntegerPrograms/',testbed,'/',Names{i}); 
     load(name);
     
     % handle variable number of arguments with transformation from
@@ -64,6 +66,7 @@ end
 all_data = [lammin, lbs, ubs, ms, fp];
 
 %% generate LaTeX table
+% Latex table with properties of all instances
 all_data = [lammin, nonconvexplayers, ms, fp]; % add/rm column
 
 input = struct();
