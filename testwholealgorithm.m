@@ -1,7 +1,9 @@
 global EQ O T N_ITER P_REQ G_CALLS G_TIME N_I;
+% set test bed (folder name in 'IntegerPrograms')
+testbed = 'TestBedNonConvex';
 
 % read instances
-S = dir('IntegerPrograms/TestSet3/*.mat');
+S = dir(append('IntegerPrograms/',testbed,'/*.mat'));
 Names = {S.name};
 n_inst = size(Names,2);
 EQ = zeros(n_inst,1);
@@ -15,7 +17,7 @@ G_TIME = zeros(n_inst,4);
 for i=1:n_inst
     N_I=i;
     disp(i); 
-    name = append('IntegerPrograms/TestSet3/',Names{i});
+    name = append('IntegerPrograms/',testbed,'/',Names{i});
     load(name);
     conv = zeros(N,1);
     for j=1:N
@@ -25,4 +27,4 @@ for i=1:n_inst
     branchingmethod(Omega,Gf,conv);
 end
 
-save('results/resultsC3');
+save(append('results/',testbed));
