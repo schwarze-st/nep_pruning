@@ -1,7 +1,7 @@
 %% get Properties of a testbed
-folder = 'TestSet5b2';
+folder = 'TestSet3';
 
-S = dir('IntegerPrograms/TestSet5b2/*t');
+S = dir('IntegerPrograms/TestSet3/*t');
 Names = {S.name};
 Nam = {};
 
@@ -22,7 +22,7 @@ fp = zeros(n_inst,1);
 
 for i=1:n_inst
     Nam{i} = append('$R',Names{i}(3:end-4),'$');
-    load(append('IntegerPrograms/TestSet5b2/',Names{i}));
+    load(append('IntegerPrograms/TestSet3/',Names{i}));
     disp(Names{i});
     for j=1:size(Gf,2)
         E = eig(Gf{2,j});
@@ -42,7 +42,7 @@ for i=1:n_inst
     lbs(i)=lb;
     ubs(i)=ub;
     ms(i) = m_nus(1);
-    name = append('IntegerPrograms/TestSet5b2/',Names{i}); 
+    name = append('IntegerPrograms/TestSet3/',Names{i}); 
     load(name);
     
     % handle variable number of arguments with transformation from
@@ -64,15 +64,15 @@ end
 all_data = [lammin, lbs, ubs, ms, fp];
 
 %% generate LaTeX table
-all_data = [lammin, nonconvexplayers, lbs,ubs, ms, fp]; % add/rm column
+all_data = [lammin, nonconvexplayers, ms, fp]; % add/rm column
 
 input = struct();
 input.data = all_data;
 input.tableRowLabels = Nam;
-input.tableColLabels = {'$\lambda_{\min}$','No. Nonconv','lb','ub','m','Size'}; % add/rm column
+input.tableColLabels = {'$\lambda_{\min}$','No. Nonconv','m','Size'}; % add/rm column
 input.tableCaption = 'Properties of random instances.';
 input.tableLabel = 'Pprop';
-input.dataFormat = {'%.4f',1,'%.0f',5}; % add/rm column
+input.dataFormat = {'%.4f',1,'%.0f',3}; % add/rm column
 input.tableBorders = 0;
 input.booktabs = 0;
 
