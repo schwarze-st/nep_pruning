@@ -19,7 +19,7 @@ function [intNE] = branch_and_bound(Omega,Obj,conv)
 %                   columns
 
 global OPT_TOL FEAS_TOL; 
-global EQ O T N_I G_CALLS G_TIME N_ITER;
+global EQ EQS O T N_I G_CALLS G_TIME N_ITER;
 OPT_TOL = 10^(-5);
 FEAS_TOL = 10^(-5);
 t0 = tic;
@@ -72,5 +72,6 @@ end
 O(N_I,3) = G_CALLS(N_I,2);
 T(N_I,3) = toc(t0);
 EQ(N_I) = size(intNE,2);
+EQS{N_I} = intNE;
 end
 

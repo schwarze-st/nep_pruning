@@ -1,4 +1,4 @@
-global EQ O T N_ITER P_REQ G_CALLS G_TIME N_I;
+global EQ O T N_ITER P_REQ G_CALLS G_TIME N_I EQS;
 % set test bed (folder name in 'IntegerPrograms')
 testbed = 'TestBedConvex';
 
@@ -7,6 +7,7 @@ S = dir(append('IntegerPrograms/',testbed,'/*.mat'));
 Names = {S.name};
 n_inst = size(Names,2);
 EQ = zeros(n_inst,1);
+EQS = cell(n_inst,1);
 O = zeros(n_inst,3);
 T = zeros(n_inst,3);
 N_ITER = zeros(n_inst,1);
