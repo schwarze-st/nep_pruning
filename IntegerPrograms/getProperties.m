@@ -1,7 +1,7 @@
 %% get Properties of a testbed
 % This script also calculates the cardinality of Omega (number of feasible
 % strategies/points) and saves it as 'fp'
-testbed = 'TestBedNonConvex';
+testbed = 'TestBedConvex';
 
 S = dir(append('IntegerPrograms/',testbed,'/*t'));
 Names = {S.name};

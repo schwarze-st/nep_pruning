@@ -18,7 +18,7 @@ flag_empty = false;
 
 while max(abs(xbar-xbarnew))>10^(-2)
     xbar = xbarnew;
-    if iter>10
+    if iter>100
         disp('Gauss Seidel terminated without convergence');
         break;
     end
