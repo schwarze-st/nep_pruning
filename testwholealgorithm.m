@@ -1,6 +1,6 @@
 global EQ O T N_ITER P_REQ G_CALLS G_TIME N_I EQS;
 % set test bed (folder name in 'IntegerPrograms')
-testbed = 'TestBedConvex';
+testbed = 'TestBedConvexSmall';
 
 % read instances
 S = dir(append('IntegerPrograms/',testbed,'/*.mat'));
@@ -25,7 +25,7 @@ for i=1:n_inst
         E = eig(Gf{2,j});
         conv(j,1) = (min(E)>=0);
     end
-    branch_and_bound(Omega,Gf,conv);
+    branchingmethod(Omega,Gf,conv);
 end
 
 save(append('results/',testbed));
