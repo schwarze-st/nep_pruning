@@ -1,6 +1,6 @@
 global EQ O T N_ITER P_REQ G_CALLS G_TIME N_I EQS;
 % set test bed (folder name in 'IntegerPrograms')
-testbed = 'TestBedConvexSmall';
+testbed = 'TestBedConvex';
 
 % read instances
 S = dir(append('IntegerPrograms/',testbed,'/*.mat'));
@@ -28,4 +28,4 @@ for i=1:n_inst
     branchingmethod(Omega,Gf,conv);
 end
 
-save(append('results/',testbed));
+save(append('results/strongerCuts/',testbed));
