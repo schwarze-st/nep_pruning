@@ -3,7 +3,9 @@ function [Omega,Gf] = getRandomNEP(N, lb, ub, n_nus, m_nus, convex)
 % player Nash equilibrium problem 
 Omega = cell([3,N]);
 Gf = cell([3,N]);
+
 for nu=1:N
+    % generate random polyhedral feasible sets
     n = n_nus(nu);
     m = m_nus(nu);
     A = zeros(m,n);
@@ -24,6 +26,7 @@ for nu=1:N
     Omega{1,nu}=A;
     Omega{2,nu}=b;
     Omega{3,nu}=[ones(n,1)*lb,ones(n,1)*ub];
+    % generate objective function
     Q = 2*(rand(n)-0.5);
     C = 2*(rand(n,sum(n_nus)-n)-0.5);
     b = 2*(rand(n,1)-0.5);
