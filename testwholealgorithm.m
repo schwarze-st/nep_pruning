@@ -1,6 +1,6 @@
 global EQ O T N_ITER P_REQ G_CALLS G_TIME N_I EQS;
 % set test bed (folder name in 'IntegerPrograms')
-testbed = 'TestBedConvex';
+testbed = 'TestBedNonConvex';
 
 % read instances
 S = dir(append('IntegerPrograms/',testbed,'/*.mat'));
