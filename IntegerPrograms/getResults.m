@@ -19,7 +19,7 @@ all_results = [EQ,T,O,explored]; % add/rm cols
 
 tsum = sum(G_TIME,2);
 G_TIME = G_TIME./tsum;
-G_TIME = [G_TIME,tsum];
+G_TIME = [G_TIME, tsum, tsum./T(:,3)];
 
 
 
@@ -40,7 +40,7 @@ input.booktabs = 0;
 input2 = struct();
 input2.data = G_TIME;
 input2.tableRowLabels = Nam;
-input2.tableColLabels = {'$GT_{gs}$','$GT_{isNE}$','$GT_{req}$','$GT_{emp}$','$GT_{tot}$'};
+input2.tableColLabels = {'$GT_{gs}$','$GT_{isNE}$','$GT_{req}$','$GT_{emp}$','$GT_{tot}$','$GT_{%}$'};
 input2.tableCaption = 'Gurobi runtime.';
 input2.tableLabel = 'Gruntime';
 input2.dataFormat = {'%.2f'};

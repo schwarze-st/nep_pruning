@@ -22,18 +22,17 @@ else
              ind = getFullIndex(nu,i,n_nus);
              B_new1{3,nu}(i,1) = round(xbar(ind))+1;
              B_new2{3,nu}(i,2) = round(xbar(ind))-1;
-             assert(~pointfeasible(B_new1,xbar,n_nus),'Error in removexbarbranch: not branched out!');
-             assert(~pointfeasible(B_new2,xbar,n_nus),'Error in removexbarbranch: not branched out!');
              % Do not add to list if lb > ub
-             if (B_new1{3,nu}(i,1)<=B_new1{3,nu}(i,2)+FEAS_TOL) % if lb == ub, we do want to keep it
+             if (B_new1{3,nu}(i,1)<=B_new1{3,nu}(i,2)+FEAS_TOL) % if lb > ub, we update it
                  B_list{k}   = B_new1;
+                 k = k+1;
              end
              if (B_new2{3,nu}(i,1)<=B_new2{3,nu}(i,2)+FEAS_TOL) 
-                 B_list{k+1} = B_new2;
+                 B_list{k} = B_new2;
+                 k = k+1;
              end
              B{3,nu}(i,1) = round(xbar(ind));
              B{3,nu}(i,2) = round(xbar(ind));
-             k = k+2;
         end
     end
 end
